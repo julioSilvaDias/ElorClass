@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ElorClass</string>
+    <string name="tituloLogin">Login</string>
+    <string name="tituloRegistro">Register</string>
+    <string name="tituloPerfil">Profile</string>
+    <string name="tituloPanel">Panel</string>
+    <string name="usuarioT">user: </string>
+    <string name="clave">password: </string>
+    <string name="confirmarClave">Confirmar contraseña</string>
+    <string name="botonLogin">LOGIN</string>
+    <string name="botonRegistro">REGISTER</string>
+    <string name="nombre">Name</string>
+    <string name="usuario">User</string>
+    <string name="apellido">Surname</string>
+    <string name="dni">DNI</string>
+    <string name="direccion">Address</string>
+    <string name="telefono">Telephone</string>
+    <string name="botonOlvidarContrasena">restablecer contraseña</string>
+</resources>
