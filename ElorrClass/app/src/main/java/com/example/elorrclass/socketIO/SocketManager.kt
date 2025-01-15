@@ -28,11 +28,24 @@ class SocketManager {
         }
     }
 
+
     fun emitEvent(eventName: String, data: JSONObject) {
-        socket.emit(eventName, data)
+        if (::socket.isInitialized && socket.connected()) {
+            socket.emit(eventName, data)
+            println("Evento emitido: $eventName, datos: $data")
+        } else {
+            println("Error: El socket no está inicializado o no está conectado.")
+        }
     }
 
     fun disconnect() {
-        socket.disconnect()
+        if (::socket.isInitialized) {
+            socket.disconnect()
+            println("Servidor desconectado")
+        }
+    }
+
+    fun isConnected(): Boolean {
+        return ::socket.isInitialized && socket.connected()
     }
 }
