@@ -20,21 +20,21 @@ class MainActivity : AppCompatActivity() {
         socketManager = SocketManager()
         socketManager.initSocket()
 
-        /*val videoView: VideoView = findViewById(R.id.videoView)
-        val videoPath = "file:///android_asset/logoGift.mp4"
+        val videoView : VideoView = findViewById(R.id.videoView)
+        val videoPath = "android.resource://" + packageName + "/" + R.raw.logomovimiento
 
         val uri = Uri.parse(videoPath)
         videoView.setVideoURI(uri)
 
-        videoView.start()*/
+        videoView.start()
         
         if (socketManager.isConnected()) {
             val testData = JSONObject().apply {
-                put("message", "Comunicacion desde Android")
+                put("message", "Comunicación desde Android")
             }
             socketManager.emitEvent("test_event", testData)
         } else {
-            println("Socket no está conectado.")
+            println("El servidor no está conectado.")
         }
 
         val testData = JSONObject().apply {
