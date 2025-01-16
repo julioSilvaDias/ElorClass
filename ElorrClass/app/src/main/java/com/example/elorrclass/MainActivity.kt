@@ -2,7 +2,6 @@ package com.example.elorrclass
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
@@ -30,7 +29,8 @@ class MainActivity : AppCompatActivity() {
         socketManager.initSocket()
 
         /**
-         * Implementacion de la animacion del logo
+         * Implementacion de la animacion del logo y
+         * verifica si el archivo existe
          */
         val videoView : VideoView = findViewById(R.id.videoView)
         val videoPath = "android.resource://" + packageName + "/" + R.raw.logomovimiento
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val uri = Uri.parse(videoPath)
         videoView.setVideoURI(uri)
         videoView.start()
-        //Ver si existe la ubicación:
+
         if (uri != null) {
             videoView.setVideoURI(uri)
             videoView.start()
@@ -67,15 +67,8 @@ class MainActivity : AppCompatActivity() {
         /**
          * Comprobar la conectividad
          */
-        verificarPermisos()
         checkConectividadAInternet()
 
-    }
-
-    private fun verificarPermisos() {
-        if (checkSelfPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_NETWORK_STATE), 1)
-        }
     }
 
     private fun checkConectividadAInternet() {
