@@ -22,4 +22,5 @@
     <string name="dualIntensiva">Intensive dual</string>
     <string name="botonVolver">VOLVER</string>
     <string name="botonOlvidarContrasena">RESET PASS</string>
+    <string name="cambiarContrasena">CHANGE PASS</string>
 </resources>

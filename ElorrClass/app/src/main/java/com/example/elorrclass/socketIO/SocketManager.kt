@@ -12,7 +12,7 @@ class SocketManager {
         try {
             val options = IO.Options()
             options.reconnection = true
-            socket = IO.socket("Aqui va la direccion", options)
+            socket = IO.socket("0.0.0.0", options)
             socket.connect()
 
             socket.on(Socket.EVENT_CONNECT) {

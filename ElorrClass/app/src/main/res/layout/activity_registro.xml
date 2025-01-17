@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="379dp"
-        android:layout_height="97dp"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="609dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.17"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView_TituloRegistro"
@@ -177,15 +181,19 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="174dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_begin="214dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -193,7 +201,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/textViewTelefono1"
-        app:layout_constraintGuide_begin="340dp"
+        app:layout_constraintGuide_end="488dp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -203,6 +211,7 @@
         android:text="@string/botonRegistro"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_Volver"
         app:layout_constraintHorizontal_bias="0.5"
@@ -213,9 +222,10 @@
         android:id="@+id/button_CambiarContrasena"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/botonOlvidarContrasena"
+        android:text="@string/cambiarContrasena"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_Registro"
         app:layout_constraintHorizontal_bias="0.5"
@@ -229,6 +239,7 @@
         android:text="@string/botonVolver"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -241,7 +252,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_begin="625dp"
+        app:layout_constraintGuide_begin="710dp"
         app:layout_constraintTop_toBottomOf="@+id/textView_DualIntensiva" />
 
     <androidx.constraintlayout.widget.Guideline
