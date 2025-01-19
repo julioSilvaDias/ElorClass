@@ -1,4 +1,3 @@
 package com.example.elorrclass.socketIO.model
 
-class MessageInput {
-}
+data class MessageInput (private val message: String)

@@ -1,4 +1,3 @@
 package com.example.elorrclass.socketIO.model
 
-class MessageOutput {
-}
+data class MessageOutput (private val message: String)
