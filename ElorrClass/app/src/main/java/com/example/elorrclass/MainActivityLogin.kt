@@ -18,10 +18,17 @@ class MainActivityLogin : AppCompatActivity() {
             finish()
         }
 
+        val socketManager = (application as MyApplication).socketManager
+
         findViewById<Button>(R.id.button_InicioSesion).setOnClickListener {
-            val intent = Intent(applicationContext, MainActivityPanel::class.java)
+            /*val intent = Intent(applicationContext, MainActivityPanel::class.java)
             startActivity(intent)
-            finish()
+            finish()*/
+
+            val password = "hola"
+            val username = "hola"
+
+            socketManager.loginUsuario(username, password)
         }
 
     }
