@@ -3,6 +3,15 @@
     <style name="Base.Theme.ElorrClass" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/PANTONE298C</item>
+        <item name="android:textColor">@color/PANTONE298C</item>
+        <item name="colorTertiary">@color/PANTONE298C</item>
+        //fondo
+        <item name="android:background">@color/GRIS</item>
+    </style>
 
+    <style name="FrameLayoutBackgroundStyle">
+        <item name="android:background">@color/black</item>
     </style>
 </resources>

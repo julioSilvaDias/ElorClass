@@ -50,6 +50,9 @@ class MainActivityLogin : AppCompatActivity() {
             val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
             val password = findViewById<EditText>(R.id.textView_IngresarClave).text.toString()
             sendLoginRequest(username, password)
+            val intent = Intent(applicationContext, MainActivityPanel::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
