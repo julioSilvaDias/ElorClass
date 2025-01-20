@@ -1,10 +1,14 @@
 package com.example.elorrclass.util
 
+import android.content.Context
+import android.content.res.Configuration
+import java.util.Locale
+
 class ThemesUtils {
 
     //Cambio de idioma
 
-   /* fun setLocale (context: Context, languageCode: String){
+   fun setLocale (context: Context, languageCode: String){
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
         val configuration = Configuration()
@@ -20,6 +24,6 @@ class ThemesUtils {
     fun getLocale(context: Context): String? {
         val prefs = context.getSharedPreferences("appPreferences", Context.MODE_PRIVATE)
         return prefs.getString("LANGUAGE_KEY", "en")
-    }*/
+    }
 
 }
