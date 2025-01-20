@@ -1,38 +1,27 @@
 package com.example.elorrclass.socketIO
 
+import android.util.Log
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 
 class SocketManager {
+    private val ipPort = "http://0.0.0.0:5000"
+    private val socket: Socket = IO.socket(ipPort)
+    private var tag = "socket.io"
 
-    private lateinit var socket: Socket
-
-    fun initSocket(){
-        try {
-            val options = IO.Options()
-            options.reconnection = true
-            socket = IO.socket("Aqui va la direccion", options)
-            socket.connect()
-
-            socket.on(Socket.EVENT_CONNECT) {
-                println("Conectando al Servidor")
-            }
-
-            socket.on("custom_event") { args ->
-                val data = args[0] as JSONObject
-                println("Evento recibido: $data")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    init{
+        socket.on(Socket.EVENT_CONNECT){
+            Log.d(tag, "Conneted...")
         }
-    }
 
-    fun emitEvent(eventName: String, data: JSONObject) {
-        socket.emit(eventName, data)
-    }
+        socket.on(Socket.EVENT_DISCONNECT){
+            Log.d(tag, "Disconnected")
+        }
 
-    fun disconnect() {
-        socket.disconnect()
+        socket.on("custom_event") { args ->
+            val data = args[0] as JSONObject
+            println("Evento recibido: $data")
+        }
     }
 }
