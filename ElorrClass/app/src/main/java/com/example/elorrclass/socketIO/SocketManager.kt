@@ -24,4 +24,12 @@ class SocketManager {
             println("Evento recibido: $data")
         }
     }
+
+    fun emitEvent(eventName: String, data: JSONObject) {
+        socket.emit(eventName, data)
+    }
+
+    fun disconnect() {
+        socket.disconnect()
+    }
 }

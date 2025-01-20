@@ -3,6 +3,10 @@
     <style name="Base.Theme.ElorrClass" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/PANTONE3135C</item>
+        <item name="android:textColor">@color/PANTONE2745C</item>
+        <item name="colorTertiary">@color/PANTONE298C</item>
+
     </style>
 
     <style name="Theme.ElorrClass" parent="Base.Theme.ElorrClass" />

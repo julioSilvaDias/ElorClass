@@ -4,9 +4,10 @@
     <string name="tituloRegistro">Register</string>
     <string name="tituloPerfil">Profile</string>
     <string name="tituloPanel">Panel</string>
-    <string name="usuarioT">user: </string>
-    <string name="clave">password: </string>
-    <string name="confirmarClave">Confirmar contraseña</string>
+    <string name="usuarioLogin">user: </string>
+    <string name="claveLogin">password: </string>
+    <string name="claveRegistro">password</string>
+    <string name="confirmarClave">Confirm password</string>
     <string name="botonLogin">LOGIN</string>
     <string name="botonRegistro">REGISTER</string>
     <string name="nombre">Name</string>
@@ -15,5 +16,11 @@
     <string name="dni">DNI</string>
     <string name="direccion">Address</string>
     <string name="telefono">Telephone</string>
-    <string name="botonOlvidarContrasena">restablecer contraseña</string>
+    <string name="telefono2">Telephone 2</string>
+    <string name="cicloFormativo">training cycle</string>
+    <string name="curso">courses</string>
+    <string name="dualIntensiva">Intensive dual</string>
+    <string name="botonVolver">VOLVER</string>
+    <string name="botonOlvidarContrasena">RESET PASS</string>
+    <string name="cambiarContrasena">CHANGE PASS</string>
 </resources>
