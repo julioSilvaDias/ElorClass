@@ -1,9 +1,9 @@
 package com.example.elorrclass.socketIO
 
 import android.app.Activity
-import android.media.metrics.Event
 import android.util.Log
 import com.example.elorrclass.socketIO.config.Events
+import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -32,13 +32,14 @@ class SocketManager(private val activity: Activity){
     }
 
     fun loginUsuario(username: String, password: String) {
-        val loginData = JSONObject().apply {
-            put("login", username)
-            put("password", password)
-        }
+        //val loginData = JSONObject().apply {
+        //    put("login", username)
+        //   put("password", password)
+        //}
 
-        socket.emit(Events.ON_LOGIN.value, loginData)
-        Log.d(tag, "login enviado: $loginData")
+        val userPass = UserPass(username, password)
+        socket.emit(Events.ON_LOGIN.value, Gson().toJson(userPass))
+        Log.d(tag, "Login enviado: $userPass")
     }
 
     fun connect(){
