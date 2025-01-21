@@ -8,6 +8,9 @@
         <item name="colorTertiary">@color/PANTONE298C</item>
 
     </style>
+    <style name="FrameLayoutBackgroundStyle">
+        <item name="android:background">@color/PANTONE3135C</item>
+    </style>
 
     <style name="Theme.ElorrClass" parent="Base.Theme.ElorrClass" />
 </resources>

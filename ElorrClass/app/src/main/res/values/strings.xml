@@ -20,7 +20,23 @@
     <string name="cicloFormativo">training cycle</string>
     <string name="curso">courses</string>
     <string name="dualIntensiva">Intensive dual</string>
-    <string name="botonVolver">VOLVER</string>
+    <string name="botonVolver">BACK</string>
     <string name="botonOlvidarContrasena">RESET PASS</string>
     <string name="cambiarContrasena">CHANGE PASS</string>
+    <string name="botonVerReuniones">MEETINGS</string>
+    <string name="botonMensajes">MESSAGES</string>
+    <string name="botonVerPDF">PDF</string>
+    //Profile
+    <string name="switchCambioTema">Change theme</string>
+    <string name="cambiarIdioma">Idioma</string>
+    <string name="claveActual">current password</string>
+    <string name="botonCambioDeClave">CHANGE PASSWORD</string>
+    <string name="nuevaClave">New password:</string>
+    <string name="confirmarNuevaClave">Confirm new password:</string>
+    <string-array name="changeLanguage">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>Euskera</item>
+    </string-array>
+
 </resources>

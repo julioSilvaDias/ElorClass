@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ElorClass</string>
+    <string name="tituloLogin">Hasiera Saioa</string>
+    <string name="tituloRegistro">Erregistroa</string>
+    <string name="tituloPerfil">Profila</string>
+    <string name="tituloPanel">Panela</string>
+    <string name="usuarioLogin">ususarioa: </string>
+    <string name="claveLogin">pasahitza: </string>
+    <string name="claveRegistro">pasahitza</string>
+    <string name="confirmarClave">Pasahitza baieztatu</string>
+    <string name="botonLogin">HASIERA SAIOA</string>
+    <string name="botonRegistro">ERREGISTRATU</string>
+    <string name="nombre">Izena</string>
+    <string name="usuario">Usuarioa</string>
+    <string name="apellido">Abizena</string>
+    <string name="dni">NAN</string>
+    <string name="direccion">Helbidea</string>
+    <string name="telefono">Telefonoa</string>
+    <string name="telefono2">Telefonoa</string>
+    <string name="cicloFormativo">Heziketa Zikloa</string>
+    <string name="curso">ikastaroa</string>
+    <string name="dualIntensiva">Dual trinkoa</string>
+    <string name="botonVolver">itzuli</string>
+    <string name="botonOlvidarContrasena">Gakoa berrezarri</string>
+    <string name="cambiarContrasena">GAKOA ALDATU</string>
+    <string name="botonVerReuniones">BILERAK</string>
+    <string name="botonMensajes">MEZUAK</string>
+    <string name="botonVerPDF">PDF</string>
+    //Profile
+    <string name="switchCambioTema">Gaia aldatu</string>
+    <string name="cambiarIdioma">Idioma</string>
+    <string name="claveActual">Egungo gakoa</string>
+    <string name="botonCambioDeClave">Gakoa aldatu</string>
+    <string name="nuevaClave">Gakoa aldatu:</string>
+    <string name="confirmarNuevaClave">Berretsi</string>
+    <string-array name="changeLanguage">
+        <item>Ingelesa</item>
+        <item>Gaztelania</item>
+        <item>Euskara</item>
+    </string-array>
+</resources>

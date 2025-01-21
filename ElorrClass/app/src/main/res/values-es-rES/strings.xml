@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ElorClass</string>
+    <string name="tituloLogin">Inicio Sesion</string>
+    <string name="tituloRegistro">Registro</string>
+    <string name="tituloPerfil">Perfil</string>
+    <string name="tituloPanel">Panel</string>
+    <string name="usuarioLogin">ususario: </string>
+    <string name="claveLogin">contraseña: </string>
+    <string name="claveRegistro">contraseña</string>
+    <string name="confirmarClave">Confirmar contraseña</string>
+    <string name="botonLogin">INICIO SESION</string>
+    <string name="botonRegistro">REGISTRAR</string>
+    <string name="nombre">Nombre</string>
+    <string name="usuario">Usuario</string>
+    <string name="apellido">Apellido</string>
+    <string name="dni">DNI</string>
+    <string name="direccion">Dirección</string>
+    <string name="telefono">Teléfono</string>
+    <string name="telefono2">Teléfono</string>
+    <string name="cicloFormativo">Ciclo Formativo</string>
+    <string name="curso">curso</string>
+    <string name="dualIntensiva">Dual Intensiva</string>
+    <string name="botonVolver">Volver</string>
+    <string name="botonOlvidarContrasena">Restablecer clave</string>
+    <string name="cambiarContrasena">CAMBIAR CLAVE</string>
+    <string name="botonVerReuniones">REUNIONES</string>
+    <string name="botonMensajes">MENSAJES</string>
+    <string name="botonVerPDF">PDF</string>
+    //Profile
+    <string name="switchCambioTema">Cambiar tema</string>
+    <string name="cambiarIdioma">Idioma</string>
+    <string name="claveActual">Clave actual</string>
+    <string name="botonCambioDeClave">Cambiar Clave</string>
+    <string name="nuevaClave">Nueva Clave:</string>
+    <string name="confirmarNuevaClave">Confirmar nueva clave:</string>
+    <string-array name="changeLanguage">
+        <item>Inglés</item>
+        <item>Español</item>
+        <item>Euskera</item>
+    </string-array>
+</resources>
