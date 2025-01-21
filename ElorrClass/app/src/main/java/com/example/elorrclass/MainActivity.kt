@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        val socketManager = (application as MyApplication).socketManager
+        val socketManager = SocketManager(this)
 
         /**
          * Implementacion de la animacion del logo y

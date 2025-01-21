@@ -1,15 +1,15 @@
 package com.example.elorrclass.socketIO
 
+import android.app.Activity
 import android.media.metrics.Event
 import android.util.Log
-import com.example.elorrclass.MyApplication
 import com.example.elorrclass.socketIO.config.Events
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 
-class SocketManager(private val activity: MyApplication){
+class SocketManager(private val activity: Activity){
     private val ipPort = "http://10.5.104.50:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"

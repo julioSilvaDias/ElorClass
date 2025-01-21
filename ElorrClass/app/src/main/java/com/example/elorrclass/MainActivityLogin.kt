@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.elorrclass.socketIO.SocketManager
 
 class MainActivityLogin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +19,7 @@ class MainActivityLogin : AppCompatActivity() {
             finish()
         }
 
-        val socketManager = (application as MyApplication).socketManager
+        val socketManager = SocketManager(this)
 
         findViewById<Button>(R.id.button_InicioSesion).setOnClickListener {
             /*val intent = Intent(applicationContext, MainActivityPanel::class.java)
