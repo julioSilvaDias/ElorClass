@@ -25,8 +25,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        socketManager = SocketManager()
-        socketManager.initSocket()
+        val socketManager = SocketManager(this)
 
         /**
          * Implementacion de la animacion del logo y
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             val testData = JSONObject().apply {
                 put("message", "Comunicación desde Android")
             }
-            socketManager.emitEvent("test_event", testData)
+
         } else {
             println("El servidor no está conectado.")
         }
@@ -61,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         val testData = JSONObject().apply {
             put("message", "Comunicación desde Android")
         }
-        socketManager.emitEvent("test_event", testData)
 
 
         /**
@@ -120,8 +118,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
+  /*  override fun onDestroy() {
         super.onDestroy()
         socketManager.disconnect()
-    }
+    }*/
 }
