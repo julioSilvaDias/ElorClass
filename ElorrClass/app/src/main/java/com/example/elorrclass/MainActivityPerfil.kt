@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Switch
 import androidx.activity.enableEdgeToEdge
@@ -18,17 +17,27 @@ import java.util.Locale
 
 class MainActivityPerfil : AppCompatActivity() {
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    private lateinit var switchCambioTema: Switch
     private lateinit var spinnerChangeLanguage: Spinner
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_perfil)
 
         spinnerChangeLanguage = findViewById(R.id.spinner)
-        val switchCambioTema: Switch = findViewById(R.id.switch_CambioTema)
+        switchCambioTema = findViewById(R.id.switch_CambioTema)
+//
+        val themesUtils = ThemesUtils()
+        val languageCode = themesUtils.getLocale(this) ?: "en"
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
 
+        val configuration = resources.configuration
+        configuration.setLocale(locale)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+   //
         val isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
         switchCambioTema.isChecked = isDarkMode
 
@@ -46,31 +55,44 @@ class MainActivityPerfil : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        setUpSpinner()
     }
 
     private fun setUpSpinner() {
+        val themesUtils = ThemesUtils()
+
         val adapter = ArrayAdapter.createFromResource(
             this,
             R.array.changeLanguage,
             android.R.layout.simple_spinner_item
         )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerChangeLanguage.adapter = adapter
 
-        /*spinnerChangeLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedLanguage = if (position == 0) "en" else "es"
-                val currentLanguage = Locale.getDefault().language
+        val currentLanguage = themesUtils.getLocale(this) ?: "en"
+        val selectedPosition = when (currentLanguage) {
+            "es" -> 1
+            "eu" -> 2
+            else -> 0
+        }
+        spinnerChangeLanguage.setSelection(selectedPosition)
+
+        spinnerChangeLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedLanguage = when (position) {
+                    1 -> "es"
+                    2 -> "eu"
+                    else -> "en"
+                }
                 if (selectedLanguage != currentLanguage) {
-                    ThemesUtils.setLocale(this@MainActivityProfile, selectedLanguage)
+                    themesUtils.setLocale(this@MainActivityPerfil, selectedLanguage)
                     recreate()
                 }
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
+            override fun onNothingSelected(parent: AdapterView<*>?) {
             }
-        }*/
+        }
     }
-
 }
