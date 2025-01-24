@@ -60,4 +60,6 @@ dependencies {
     //SOCKET.IO
     implementation(libs.socket.io.client)
     implementation(libs.engine.io.client)
+    // GSON
+    implementation(libs.gson)
 }
