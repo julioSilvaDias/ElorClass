@@ -2,11 +2,13 @@ package com.example.elorrclass.socketIO
 
 import android.app.Activity
 import android.util.Log
+import com.example.elorrclass.MainActivityLogin
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
 import com.example.elorrclass.socketIO.model.MessageInput
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
@@ -29,6 +31,18 @@ class SocketManager(private val activity: Activity){
             val response = args[0] as JSONObject
             val message = response.getString("message")
             Log.d("Socket", "Mensaje recibido: $message")
+
+            (activity as? MainActivityLogin)?.handleLoginResponse(message)
+        }
+
+        socket.on("loginResponse") { args ->
+            val response = args[0] as JSONObject
+            val success = response.getBoolean("success")
+            val message = response.getString("message")
+
+            Log.d("Socket", "Respuesta del servidor: Éxito: $success, Mensaje: $message")
+
+            (activity as? MainActivityLogin)?.handleLoginResponse(message)
         }
 
         socket.on(Events.ON_GET_USER_ID_ANSWER.value){ args->

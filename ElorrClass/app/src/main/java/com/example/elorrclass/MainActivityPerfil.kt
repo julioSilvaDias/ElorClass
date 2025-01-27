@@ -28,7 +28,8 @@ class MainActivityPerfil : AppCompatActivity() {
 
         spinnerChangeLanguage = findViewById(R.id.spinner)
         switchCambioTema = findViewById(R.id.switch_CambioTema)
-//
+
+        //CAMBIO DE IDIOMA
         val themesUtils = ThemesUtils()
         val languageCode = themesUtils.getLocale(this) ?: "en"
         val locale = Locale(languageCode)
@@ -37,7 +38,8 @@ class MainActivityPerfil : AppCompatActivity() {
         val configuration = resources.configuration
         configuration.setLocale(locale)
         resources.updateConfiguration(configuration, resources.displayMetrics)
-   //
+
+        //CAMBIO DE TEMA
         val isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
         switchCambioTema.isChecked = isDarkMode
 
