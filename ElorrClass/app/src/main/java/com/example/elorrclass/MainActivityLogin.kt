@@ -39,6 +39,15 @@ class MainActivityLogin : AppCompatActivity() {
         findViewById<Button>(R.id.button_InicioSesion).setOnClickListener {
             val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
             val password = findViewById<EditText>(R.id.textView_IngresarClave).text.toString()
+            /**
+             * Si el usuario no pone nada, Se mandara el mensaje de que requiere
+             * las credenciales
+             */
+            if (username.isEmpty()) {
+                Toast.makeText(this, "Se necesita el login informado", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             socketManager.loginUsuario(username, password)
         }
     }
@@ -48,28 +57,51 @@ class MainActivityLogin : AppCompatActivity() {
         Log.d("LoginResponse", "Respuesta del servidor: $cleanedResponse")
 
         try {
-            // Parsear el JSON recibido
+            /**
+             * Para parsear el Json recibido
+             */
             val jsonResponse = JSONObject(cleanedResponse)
-            val message = jsonResponse.getString("message") // Extraer el mensaje
+            val message = jsonResponse.getString("message")
 
-            // Asegúrate de ejecutar las acciones en el hilo principal
+            /**
+             * El runOnUiThread es para asegurar de que las acciones
+             * se ejecuten en el hilo principal
+             */
             runOnUiThread {
-                when (message) { // Usar el mensaje extraído
+                when (message) {
                     "Login correcto" -> {
-                        val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
-                        val password = findViewById<EditText>(R.id.textView_IngresarClave).text.toString()
+                        val username =
+                            findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
+                        val password =
+                            findViewById<EditText>(R.id.textView_IngresarClave).text.toString()
 
-                        // Guardar usuario en base de datos en un hilo de fondo
+                        /**
+                         * Para guardar el usuario en una base de datos en un hilo de fondo
+                         */
                         CoroutineScope(Dispatchers.IO).launch {
                             saveUserToDatabase(username, password)
                         }
 
-                        // Cambiar de actividad
                         val intent = Intent(applicationContext, MainActivityPanel::class.java)
+                        intent.putExtra("username", username)
                         startActivity(intent)
                         finish()
                     }
-                    "Usuario no encontrado" -> {
+
+                    "El Usuario no es alumno del centro." -> {
+                        Toast.makeText(this, "El usuario no está registrado en el centro", Toast.LENGTH_SHORT).show()
+                    }
+
+                    "El usuario debe de registrarse." -> {
+                        Toast.makeText(this, "El usuario debe registrarse para cambiar la contraseña", Toast.LENGTH_SHORT).show()
+                        val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
+                        val intent = Intent(applicationContext, MainActivityRegistro::class.java)
+                        intent.putExtra("username", username)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    "Login y/o Pass incorrecto" -> {
                         Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
