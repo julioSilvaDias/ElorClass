@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-  /*  override fun onDestroy() {
+   /* override fun onDestroy() {
         super.onDestroy()
         socketManager.disconnect()
     }*/
