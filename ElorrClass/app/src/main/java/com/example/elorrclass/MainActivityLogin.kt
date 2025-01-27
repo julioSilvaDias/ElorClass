@@ -15,6 +15,7 @@ import com.example.elorrclass.socketIO.SocketManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class MainActivityLogin : AppCompatActivity() {
 
@@ -43,31 +44,47 @@ class MainActivityLogin : AppCompatActivity() {
     }
 
     fun handleLoginResponse(response: String) {
-        val cleanedResponse = response.trim()  // Eliminar espacios extra antes y después
+        val cleanedResponse = response.trim()
+        Log.d("LoginResponse", "Respuesta del servidor: $cleanedResponse")
 
-        Log.d("LoginResponse", "Mensaje recibido: '$cleanedResponse'")  // Verifica lo que recibes
+        try {
+            // Parsear el JSON recibido
+            val jsonResponse = JSONObject(cleanedResponse)
+            val message = jsonResponse.getString("message") // Extraer el mensaje
 
-        if (cleanedResponse == "Login correcto") {
-            val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
-            val password = findViewById<EditText>(R.id.textView_IngresarClave).text.toString()
-
-            CoroutineScope(Dispatchers.IO).launch {
-                saveUserToDatabase(username, password)
-            }
-
-            val intent = Intent(applicationContext, MainActivityPanel::class.java)
-            startActivity(intent)
-            finish()
-        } else if (cleanedResponse == "Login y/o Pass incorrecto") {
+            // Asegúrate de ejecutar las acciones en el hilo principal
             runOnUiThread {
-                Toast.makeText(this, "Login y/o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                when (message) { // Usar el mensaje extraído
+                    "Login correcto" -> {
+                        val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
+                        val password = findViewById<EditText>(R.id.textView_IngresarClave).text.toString()
+
+                        // Guardar usuario en base de datos en un hilo de fondo
+                        CoroutineScope(Dispatchers.IO).launch {
+                            saveUserToDatabase(username, password)
+                        }
+
+                        // Cambiar de actividad
+                        val intent = Intent(applicationContext, MainActivityPanel::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                    "Usuario no encontrado" -> {
+                        Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Toast.makeText(this, "Error en el proceso de loginAndroid", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
-        } else {
+        } catch (e: Exception) {
+            Log.e("LoginResponse", "Error al procesar la respuesta del servidor", e)
             runOnUiThread {
-                Toast.makeText(this, "Error en el proceso de login", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error inesperado al procesar la respuesta", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private suspend fun saveUserToDatabase(username: String, password: String) {
         val user = Usuario(username = username, password = password)
@@ -79,6 +96,14 @@ class MainActivityLogin : AppCompatActivity() {
         val userDao = db.UsuarioDao()
         userDao.insert(user)
     }
+    /*private suspend fun saveUserToDatabase(username: String, password: String) {
+        val db = Room.databaseBuilder(applicationContext, AppDataBase::class.java, "user_database")
+            .fallbackToDestructiveMigration()
+            .build()
+
+        val userDao = db.UsuarioDao()
+        userDao.insert(Usuario(username = username, password = password))
+    }*/
     /*
     override fun onDestroy() {
         super.onDestroy()

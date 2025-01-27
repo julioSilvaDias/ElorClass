@@ -32,18 +32,20 @@ class SocketManager(private val activity: Activity){
 
             (activity as? MainActivityLogin)?.handleLoginResponse(message)
         }
+
+        socket.on("loginResponse") { args ->
+            val response = args[0] as JSONObject
+            val success = response.getBoolean("success")
+            val message = response.getString("message")
+
+            Log.d("Socket", "Respuesta del servidor: Éxito: $success, Mensaje: $message")
+
+            (activity as? MainActivityLogin)?.handleLoginResponse(message)
+        }
+
     }
 
-    fun loginUsuario(username: String, password: String) {
-        val message = JsonObject()
-        message.addProperty("username", username)
-        message.addProperty("pass", password)
 
-        socket.emit("onLogin", message.toString())
-    }
-
-
-    /*
     fun loginUsuario(username: String, password: String) {
         //val loginData = JSONObject().apply {
         //    put("login", username)
@@ -53,7 +55,7 @@ class SocketManager(private val activity: Activity){
         val userPass = UserPass(username, password)
         socket.emit(Events.ON_LOGIN.value, Gson().toJson(userPass))
         Log.d(tag, "Login enviado: $userPass")
-    }*/
+    }
 
     fun connect(){
         socket.connect()
