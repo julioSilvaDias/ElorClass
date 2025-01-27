@@ -15,7 +15,7 @@ class MainActivityPanel : AppCompatActivity() {
         socketManager.connect()
 
         //val userName = SessionManager.getUsername()
-        val userName = "alumno1"
+        val userName = "profesor1"
         socketManager!!.getUserId(userName)
     }
 }

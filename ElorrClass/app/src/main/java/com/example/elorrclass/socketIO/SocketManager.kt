@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
+import com.example.elorrclass.socketIO.model.MessageInput
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
 import io.socket.client.IO
@@ -38,8 +39,20 @@ class SocketManager(private val activity: Activity){
             val gson = Gson()
             val usuario = gson.fromJson(message, Usuario::class.java)
             println(usuario)
+            getHorario(usuario.id)
         }
 
+        socket.on(Events.ON_GET_HORARIO_ANSWER.value){ args->
+            val response = args[0] as JSONObject
+            val message = response.getString("message")
+            Log.d(tag, "mesaje recibido: $message")
+        }
+
+    }
+    fun getHorario(userId : Int?){
+        val message = MessageInput(userId.toString())
+        socket.emit(Events.ON_GET_HORARIO.value, Gson().toJson(message))
+        Log.d (tag, "datos enviados: -> $message")
     }
     fun getUserId(username: String){
         val userPass = UserPass(username, "")
