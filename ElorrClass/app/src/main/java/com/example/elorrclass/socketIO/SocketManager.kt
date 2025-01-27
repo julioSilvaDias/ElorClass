@@ -12,7 +12,7 @@ import io.socket.client.Socket
 import org.json.JSONObject
 
 class SocketManager(private val activity: Activity){
-    private val ipPort = "http://10.5.104.32:5000"
+    private val ipPort = "http://10.5.104.30:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
