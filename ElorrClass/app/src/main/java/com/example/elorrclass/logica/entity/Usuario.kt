@@ -8,5 +8,7 @@ import androidx.room.PrimaryKey
 data class Usuario(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "username") val username: String,
-    @ColumnInfo(name = "password") val password: String
+    @ColumnInfo(name = "password") val password: String,
+    val ultimoInicioSesion: Boolean = false
 )
+

@@ -43,6 +43,15 @@ class SocketManager(private val activity: Activity){
             (activity as? MainActivityLogin)?.handleLoginResponse(message)
         }
 
+        socket.on("resetPasswordResponse") { args ->
+            val response = args[0] as JSONObject
+            val success = response.getBoolean("success")
+            val message = response.getString("message")
+
+            Log.d("Socket", "Respuesta del servidor: Éxito: $success, Mensaje: $message")
+            (activity as? MainActivityLogin)?.handlePasswordResetResponse(message)
+        }
+
     }
 
 
@@ -56,6 +65,16 @@ class SocketManager(private val activity: Activity){
         socket.emit(Events.ON_LOGIN.value, Gson().toJson(userPass))
         Log.d(tag, "Login enviado: $userPass")
     }
+
+    fun resetearClave(username: String) {
+        val requestData = JSONObject().apply {
+            put("username", username)
+        }
+
+        socket.emit("resetPassword", requestData)
+        Log.d(tag, "Solicitud de restablecimiento de clave enviada: $requestData")
+    }
+
 
     fun connect(){
         socket.connect()
