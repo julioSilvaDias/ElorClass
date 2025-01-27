@@ -31,7 +31,7 @@ class MainActivityLogin : AppCompatActivity() {
         socketManager.connect()
 
         findViewById<Button>(R.id.button_Registrar).setOnClickListener {
-            val intent = Intent(applicationContext, MainActivityRegistro::class.java)
+            val intent = Intent(applicationContext, MainActivityPanel::class.java)
             startActivity(intent)
             finish()
         }
