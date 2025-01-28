@@ -14,7 +14,7 @@ import io.socket.client.Socket
 import org.json.JSONObject
 
 class SocketManager(private val activity: Activity){
-    private val ipPort = "http://10.5.104.50:5000"
+    private val ipPort = "http://10.5.104.32:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
@@ -43,6 +43,16 @@ class SocketManager(private val activity: Activity){
             Log.d("Socket", "Respuesta del servidor: Éxito: $success, Mensaje: $message")
 
             (activity as? MainActivityLogin)?.handleLoginResponse(message)
+        }
+
+        socket.on(Events.ON_RESET_PASSWORD_RESPONSE.value) { args ->
+            val response = args[0] as JSONObject
+            val success = response.getBoolean("success")
+            val message = response.getString("message")
+
+            Log.d("Socket", "Respuesta del servidor: Éxito: $success, Mensaje: $message")
+
+            (activity as? MainActivityLogin)?.handlePasswordResetResponse(message)
         }
 
         socket.on(Events.ON_GET_USER_ID_ANSWER.value){ args->
@@ -74,14 +84,17 @@ class SocketManager(private val activity: Activity){
         Log.d(tag, "Username enviado: $userPass")
     }
     fun loginUsuario(username: String, password: String) {
-        //val loginData = JSONObject().apply {
-        //    put("login", username)
-        //   put("password", password)
-        //}
-
         val userPass = UserPass(username, password)
         socket.emit(Events.ON_LOGIN.value, Gson().toJson(userPass))
         Log.d(tag, "Login enviado: $userPass")
+    }
+
+    fun resetearClave(username: String) {
+        val requestData = JSONObject().apply {
+            put("username", username)
+        }
+        socket.emit(Events.ON_RESET_PASSWORD.value, requestData)
+        Log.d(tag, "Solicitud de restablecimiento de clave enviada: $requestData")
     }
 
     fun connect(){
