@@ -2,7 +2,6 @@ package com.example.elorrclass
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -40,18 +39,32 @@ class MainActivityRegistro : AppCompatActivity() {
     }
 
     fun preloadInfo(usuario: Usuario?) {
-        val user = findViewById<EditText>(R.id.textView_UsuarioRegistro)
-        val name = findViewById<EditText>(R.id.textView_Nombre)
-        val surname = findViewById<EditText>(R.id.textView_Apellido)
-        val dni = findViewById<EditText>(R.id.textView_DNI)
-        val address = findViewById<EditText>(R.id.textView_Direccion)
-        val telephone = findViewById<EditText>(R.id.textViewTelefono1)
-        val telephone2 = findViewById<EditText>(R.id.textView_Telefono2)
-        val password = findViewById<EditText>(R.id.textView_Contrasena)
-        val confirmPassword = findViewById<EditText>(R.id.textView_ConfirmarContrasena)
+        val user = findViewById<TextView>(R.id.textView_UsuarioRegistro)
+        val name = findViewById<TextView>(R.id.textView_Nombre)
+        val surname = findViewById<TextView>(R.id.textView_Apellido)
+        val dni = findViewById<TextView>(R.id.textView_DNI)
+        val email = findViewById<TextView>(R.id.textView_Direccion)
+        val telephone = findViewById<TextView>(R.id.textViewTelefono1)
+        val telephone2 = findViewById<TextView>(R.id.textView_Telefono2)
+        val password = findViewById<TextView>(R.id.textView_Contrasena)
+        //val confirmPassword = findViewById<TextView>(R.id.textView_ConfirmarContrasena)
         val trainingCycle = findViewById<TextView>(R.id.textView_CicloFormativo)
         val courses = findViewById<TextView>(R.id.textView_Curso)
         val intensiveDual = findViewById<TextView>(R.id.textView_DualIntensiva)
+
+        if (usuario != null) {
+            user.text = usuario.login
+            name.text = usuario.nombre
+            surname.text = usuario.apellidos
+            dni.text = usuario.dni
+            email.text = usuario.email
+            telephone.text = usuario.telefono1
+            telephone2.text = usuario.telefono2
+            password.text = usuario.password
+            trainingCycle.text = usuario.cicloFormativo
+            courses.text = usuario.curso.toString()
+            intensiveDual.text = usuario.duales.toString()
+        }
     }
 
     override fun onDestroy() {
