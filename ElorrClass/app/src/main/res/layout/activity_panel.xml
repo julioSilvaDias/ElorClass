@@ -60,17 +60,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView_Informacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Aqui deberia de verse el horario o reuniones"
-        app:layout_constraintBottom_toTopOf="@+id/guideline14"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline13"
-        tools:ignore="HardcodedText" />
-
     <ImageButton
         android:id="@+id/imageButton_Perfil"
         android:layout_width="55dp"
@@ -126,6 +115,16 @@
         app:layout_constraintStart_toEndOf="@+id/button_Pdf"
         app:layout_constraintTop_toTopOf="@+id/guideline14" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHorario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/guideline14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline16"
+        android:padding="8dp"/>
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline16"
         android:layout_width="wrap_content"
@@ -136,4 +135,5 @@
         app:layout_constraintGuide_begin="790dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

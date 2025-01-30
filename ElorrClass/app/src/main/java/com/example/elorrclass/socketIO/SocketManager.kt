@@ -3,6 +3,8 @@ package com.example.elorrclass.socketIO
 import android.app.Activity
 import android.util.Log
 import com.example.elorrclass.MainActivityLogin
+import com.example.elorrclass.MainActivityPanel
+import com.example.elorrclass.pojos.Horario
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
 import com.example.elorrclass.socketIO.model.MessageInput
@@ -12,9 +14,10 @@ import com.google.gson.JsonObject
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
+import java.nio.charset.Charset
 
 class SocketManager(private val activity: Activity){
-    private val ipPort = "http://10.5.104.50:5000"
+    private val ipPort = "http://10.5.104.26:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
@@ -52,15 +55,19 @@ class SocketManager(private val activity: Activity){
 
             val gson = Gson()
             val usuario = gson.fromJson(message, Usuario::class.java)
-            println(usuario)
-            getHorario(usuario.id)
+            (activity as? MainActivityPanel)?.handleUserResponse(usuario)
         }
 
-        socket.on(Events.ON_GET_HORARIO_ANSWER.value){ args->
+        socket.on(Events.ON_GET_HORARIO_ANSWER.value) { args ->
             val response = args[0] as JSONObject
             val message = response.getString("message")
-            Log.d(tag, "mesaje recibido: $message")
+
+            val horarios = Gson().fromJson(message, Array<Horario>::class.java).toList()
+
+            (activity as? MainActivityPanel)?.handleHorarioResponse(horarios)
         }
+
+
 
     }
     fun getHorario(userId : Int?){
