@@ -54,8 +54,7 @@ class SocketManager(private val activity: Activity){
             val gson = Gson()
             val usuario = gson.fromJson(message, Usuario::class.java)
             println(usuario)
-            (activity as? MainActivityRegistro)?.preloadInfo(usuario)
-            getHorario(usuario.id)
+            (activity as MainActivityRegistro).preloadInfo(usuario)
         }
 
         socket.on(Events.ON_GET_HORARIO_ANSWER.value){ args->
@@ -63,6 +62,12 @@ class SocketManager(private val activity: Activity){
             val message = response.getString("message")
             Log.d(tag, "mesaje recibido: $message")
         }
+
+//        socket.on(Events.ON_CHANGE_PASSWORD_ANSWER.value){ args->
+//            val response = args[0] as JSONObject
+//            val message = response.getString("message")
+//            Log.d(tag, "mesaje recibido: $message")
+//        }
 
     }
     fun getHorario(userId : Int?){
@@ -100,4 +105,10 @@ class SocketManager(private val activity: Activity){
         return socket.connected().also {
             Log.d(tag, if (it) "Socket is connected" else "Socket is not connected")
         }}
+
+//    fun changePassword(password : String) {
+//        val message = MessageInput(password)
+//        socket.emit(Events.ON_CHANGE_PASSWORD.value, Gson().toJson(message))
+//        Log.d (tag, "datos enviados: -> $message")
+//    }
 }
