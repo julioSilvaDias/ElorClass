@@ -161,7 +161,7 @@ class MainActivityLogin : AppCompatActivity() {
             .setTitle("Recuperar contraseña")
             .setMessage("Introduce tu nombre de usuario o correo electrónico para recuperar la contraseña.")
             .setView(dialogView)
-            .setPositiveButton("Enviar") { dialog, which ->
+            .setPositiveButton("Enviar") { _, _ ->
                 val username = usernameEditText.text.toString()
                 if (username.isNotEmpty()) {
                     enviarSolicitudParaRestablecerClave(username)
@@ -221,40 +221,40 @@ class MainActivityLogin : AppCompatActivity() {
             runOnUiThread {
                 when (message) {
                     "Correo enviado correctamente" -> {
-                        Toast.makeText(this, "Se ha enviado un correo con la nueva clave", Toast.LENGTH_SHORT).show()
+                        showToast("Se ha enviado un correo con la nueva clave")
                     }
-
                     "Usuario no es alumno del centro" -> {
-                        Toast.makeText(this, "El usuario no está registrado en el centro", Toast.LENGTH_SHORT).show()
+                        showToast("El usuario no está registrado en el centro")
                     }
-
                     "El usuario debe registrarse" -> {
-                        Toast.makeText(this, "El usuario debe registrarse", Toast.LENGTH_SHORT).show()
+                        showToast("El usuario debe registrarse")
                         val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
-                        val intent = Intent(applicationContext, MainActivityRegistro::class.java)
-                        intent.putExtra("username", username)
-                        startActivity(intent)
-                        finish()
+                        navigateToRegistration(username)
                     }
-
                     "Login correcto, pero no registrado" -> {
-                        Toast.makeText(this, "Usuario no registrado, por favor regístrese", Toast.LENGTH_SHORT).show()
+                        showToast("Usuario no registrado, por favor regístrese")
                         val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
-                        val intent = Intent(applicationContext, MainActivityRegistro::class.java)
-                        intent.putExtra("username", username)
-                        startActivity(intent)
-                        finish()
+                        navigateToRegistration(username)
                     }
-
                     else -> {
-                        Toast.makeText(this, "Error inesperado al procesar la respuesta", Toast.LENGTH_SHORT).show()
+                        showToast("Error inesperado al procesar la respuesta")
                     }
                 }
-
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "Error inesperado al procesar la respuesta", Toast.LENGTH_SHORT).show()
+            showToast("Error inesperado al procesar la respuesta")
         }
+    }
+
+    private fun navigateToRegistration(username: String) {
+        val intent = Intent(applicationContext, MainActivityRegistro::class.java)
+        intent.putExtra("username", username)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
