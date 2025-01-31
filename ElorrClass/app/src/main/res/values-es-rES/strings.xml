@@ -39,4 +39,9 @@
         <item>Español</item>
         <item>Euskera</item>
     </string-array>
+
+    <string-array name="semanas">
+        <item>Semana 1</item>
+        <item>Semana 2</item>
+    </string-array>
 </resources>

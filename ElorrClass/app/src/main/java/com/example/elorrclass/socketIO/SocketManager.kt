@@ -63,7 +63,7 @@ class SocketManager(private val activity: Activity){
             val message = response.getString("message")
 
             val horarios = Gson().fromJson(message, Array<Horario>::class.java).toList()
-
+            println(horarios)
             (activity as? MainActivityPanel)?.handleHorarioResponse(horarios)
         }
 

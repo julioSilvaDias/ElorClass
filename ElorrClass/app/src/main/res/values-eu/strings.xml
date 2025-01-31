@@ -39,4 +39,9 @@
         <item>Gaztelania</item>
         <item>Euskara</item>
     </string-array>
+
+    <string-array name="semanas">
+        <item>Astean 1</item>
+        <item>Astean 2</item>
+    </string-array>
 </resources>

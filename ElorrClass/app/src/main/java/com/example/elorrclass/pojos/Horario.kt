@@ -8,5 +8,7 @@ data class Horario(
     var id_Usuario: Int = 0,
     var dia: String? = null,
     var tipo: String? = null,
-    var aula: String? = null
+    var aula: String? = null,
+    var semana: Int = 0,
+    var hora: String? = null
 ) : Serializable
