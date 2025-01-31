@@ -13,17 +13,17 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 
-class SocketManager(private val activity: Activity){
+class SocketManager(private val activity: Activity) {
     private val ipPort = "http://10.5.104.32:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
-    init{
-        socket.on(Socket.EVENT_CONNECT){
+    init {
+        socket.on(Socket.EVENT_CONNECT) {
             Log.d(tag, "Conneted...")
         }
 
-        socket.on(Socket.EVENT_DISCONNECT){
+        socket.on(Socket.EVENT_DISCONNECT) {
             Log.d(tag, "Disconnected")
         }
 
@@ -45,17 +45,15 @@ class SocketManager(private val activity: Activity){
             (activity as? MainActivityLogin)?.handleLoginResponse(message)
         }
 
-        socket.on(Events.ON_RESET_PASSWORD_RESPONSE.value) { args ->
+        /*socket.on(Events.ON_RESET_PASSWORD_RESPONSE.value) { args ->
             val response = args[0] as JSONObject
             val success = response.getBoolean("success")
             val message = response.getString("message")
-
             Log.d("Socket", "Respuesta del servidor: Éxito: $success, Mensaje: $message")
-
             (activity as? MainActivityLogin)?.handlePasswordResetResponse(message)
-        }
+        }*/
 
-        socket.on(Events.ON_GET_USER_ID_ANSWER.value){ args->
+        socket.on(Events.ON_GET_USER_ID_ANSWER.value) { args ->
             val response = args[0] as JSONObject
             val message = response.getString("message")
             Log.d("Socket", "Mensaje recibido: $message")
@@ -66,38 +64,41 @@ class SocketManager(private val activity: Activity){
             getHorario(usuario.id)
         }
 
-        socket.on(Events.ON_GET_HORARIO_ANSWER.value){ args->
+        socket.on(Events.ON_GET_HORARIO_ANSWER.value) { args ->
             val response = args[0] as JSONObject
             val message = response.getString("message")
             Log.d(tag, "mesaje recibido: $message")
         }
 
     }
-    fun getHorario(userId : Int?){
+
+    fun getHorario(userId: Int?) {
         val message = MessageInput(userId.toString())
         socket.emit(Events.ON_GET_HORARIO.value, Gson().toJson(message))
-        Log.d (tag, "datos enviados: -> $message")
+        Log.d(tag, "datos enviados: -> $message")
     }
-    fun getUserId(username: String){
+
+    fun getUserId(username: String) {
         val userPass = UserPass(username, "")
         socket.emit(Events.ON_GET_USER_ID.value, Gson().toJson(userPass))
         Log.d(tag, "Username enviado: $userPass")
     }
+
     fun loginUsuario(username: String, password: String) {
         val userPass = UserPass(username, password)
         socket.emit(Events.ON_LOGIN.value, Gson().toJson(userPass))
         Log.d(tag, "Login enviado: $userPass")
     }
 
-    fun resetearClave(username: String) {
+    /*fun resetearClave(username: String) {
         val requestData = JSONObject().apply {
             put("username", username)
         }
         socket.emit(Events.ON_RESET_PASSWORD.value, requestData)
-        Log.d(tag, "Solicitud de restablecimiento de clave enviada: $requestData")
-    }
+        Log.d(tag, "Password reset request sent: $requestData")
+    }*/
 
-    fun connect(){
+    fun connect() {
         socket.connect()
         Log.d(tag, "connecting to server....")
     }
@@ -110,5 +111,6 @@ class SocketManager(private val activity: Activity){
     fun isConnected(): Boolean {
         return socket.connected().also {
             Log.d(tag, if (it) "Socket is connected" else "Socket is not connected")
-        }}
+        }
+    }
 }

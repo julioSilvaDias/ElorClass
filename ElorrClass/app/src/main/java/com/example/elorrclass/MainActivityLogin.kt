@@ -31,9 +31,10 @@ class MainActivityLogin : AppCompatActivity() {
         socketManager.connect()
 
         CoroutineScope(Dispatchers.IO).launch {
-            val db = Room.databaseBuilder(applicationContext, AppDataBase::class.java, "user_database")
-                .fallbackToDestructiveMigration()
-                .build()
+            val db =
+                Room.databaseBuilder(applicationContext, AppDataBase::class.java, "user_database")
+                    .fallbackToDestructiveMigration()
+                    .build()
 
             val userDao = db.UsuarioDao()
 
@@ -48,9 +49,7 @@ class MainActivityLogin : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button_OlvidarClave).setOnClickListener {
-           // val intent = Intent(applicationContext,)
-        //sendPasswordResetRequest(username)
-            mostrarRestablecerClave()
+           //mostrarRestablecerClave()
         }
 
         findViewById<Button>(R.id.button_Registrar).setOnClickListener {
@@ -103,19 +102,6 @@ class MainActivityLogin : AppCompatActivity() {
                          */
                         CoroutineScope(Dispatchers.IO).launch {
                             saveUserToDatabase(username, password)
-                            val db = Room.databaseBuilder(applicationContext, AppDataBase::class.java, "user_database")
-                                .fallbackToDestructiveMigration()
-                                .build()
-
-                            val userDao = db.UsuarioDao()
-                            val lastUser = userDao.getUltimoUsuarioLogeado()
-
-                            runOnUiThread {
-                                lastUser?.let {
-                                    findViewById<EditText>(R.id.textView_IngresarUsuario).setText(it.username)
-                                    findViewById<EditText>(R.id.textView_IngresarClave).setText(it.password)
-                                }
-                            }
                         }
 
                         val intent = Intent(applicationContext, MainActivityPanel::class.java)
@@ -153,7 +139,7 @@ class MainActivityLogin : AppCompatActivity() {
         }
     }
 
-    private fun mostrarRestablecerClave() {
+    /*private fun mostrarRestablecerClave() {
         val dialogView = layoutInflater.inflate(R.layout.activity_resetear_password, null)
         val usernameEditText = dialogView.findViewById<EditText>(R.id.textView_RestablecerPassword)
 
@@ -173,7 +159,7 @@ class MainActivityLogin : AppCompatActivity() {
             .create()
 
         alertDialog.show()
-    }
+    }*/
 
     private suspend fun saveUserToDatabase(username: String, password: String) {
         val user = Usuario(username = username, password = password, ultimoInicioSesion = true)
@@ -189,28 +175,33 @@ class MainActivityLogin : AppCompatActivity() {
         userDao.insert(user)
     }
 
-    private fun enviarSolicitudParaRestablecerClave(username: String) {
+    /*private fun enviarSolicitudParaRestablecerClave(username: String) {
         if (username.isEmpty()) {
-            runOnUiThread {
-                Toast.makeText(this@MainActivityLogin, "Por favor, ingresa tu usuario", Toast.LENGTH_SHORT).show()
-            }
+            showToast("Por favor, ingresa tu usuario")
             return
         }
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                socketManager.resetearClave(username) // Solo llamas al método
+                Log.d("PasswordReset", "Enviando solicitud para restablecer la clave para el usuario: $username")
+
+                socketManager.resetearClave(username)
+
+                Log.d("PasswordReset", "Solicitud de restablecimiento enviada correctamente para el usuario: $username")
+
+                runOnUiThread {
+                    showToast("Solicitud de recuperación enviada correctamente.")
+                }
             } catch (e: Exception) {
                 Log.e("PasswordReset", "Error al intentar enviar el correo de recuperación", e)
                 runOnUiThread {
-                    Toast.makeText(this@MainActivityLogin, "No se ha podido enviar el correo", Toast.LENGTH_SHORT).show()
+                    showToast("No se ha podido enviar el correo de recuperación.")
                 }
             }
         }
-    }
+    }*/
 
-
-    fun handlePasswordResetResponse(response: String) {
+    /*fun handlePasswordResetResponse(response: String) {
         val cleanedResponse = response.trim()
         Log.d("PasswordResetResponse", "Respuesta del servidor: $cleanedResponse")
 
@@ -221,30 +212,29 @@ class MainActivityLogin : AppCompatActivity() {
             runOnUiThread {
                 when (message) {
                     "Correo enviado correctamente" -> {
-                        showToast("Se ha enviado un correo con la nueva clave")
+                        showToast("Se ha enviado un correo con la nueva clave.")
                     }
+
                     "Usuario no es alumno del centro" -> {
-                        showToast("El usuario no está registrado en el centro")
+                        showToast("El usuario no está registrado en el centro.")
                     }
-                    "El usuario debe registrarse" -> {
-                        showToast("El usuario debe registrarse")
-                        val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
-                        navigateToRegistration(username)
+
+                    "Login no existe en BBDD remota" -> {
+                        showToast("El login informado no existe en la base de datos.")
                     }
-                    "Login correcto, pero no registrado" -> {
-                        showToast("Usuario no registrado, por favor regístrese")
-                        val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
-                        navigateToRegistration(username)
-                    }
+
                     else -> {
-                        showToast("Error inesperado al procesar la respuesta")
+                        showToast("No ha podido enviarse el correo. Intenta nuevamente.")
                     }
                 }
             }
         } catch (e: Exception) {
-            showToast("Error inesperado al procesar la respuesta")
+            Log.e("PasswordReset", "Error al procesar la respuesta del servidor", e)
+            runOnUiThread {
+                showToast("Ocurrió un error inesperado al procesar la respuesta.")
+            }
         }
-    }
+    }*/
 
     private fun navigateToRegistration(username: String) {
         val intent = Intent(applicationContext, MainActivityRegistro::class.java)
