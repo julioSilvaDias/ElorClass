@@ -22,7 +22,7 @@ class MainActivityRegistro : AppCompatActivity() {
     private lateinit var telephone: TextView
     private lateinit var telephone2: TextView
     private lateinit var password: TextView
-    private lateinit var confirmPassword: TextView
+    //private lateinit var confirmPassword: TextView
     private lateinit var trainingCycle: TextView
     private lateinit var courses: TextView
     private lateinit var intensiveDual: TextView
@@ -40,7 +40,7 @@ class MainActivityRegistro : AppCompatActivity() {
         telephone = findViewById(R.id.textViewTelefono1)
         telephone2 = findViewById(R.id.textView_Telefono2)
         password = findViewById(R.id.textView_Contrasena)
-        confirmPassword = findViewById(R.id.textView_ConfirmarContrasena)
+
         trainingCycle = findViewById(R.id.textView_CicloFormativo)
         courses = findViewById(R.id.textView_Curso)
         intensiveDual = findViewById(R.id.textView_DualIntensiva)
@@ -60,27 +60,39 @@ class MainActivityRegistro : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button_CambiarContrasena).setOnClickListener {
-            if (password.text.isEmpty() || password.text == "Elorrieta00" || confirmPassword.text.isEmpty()) {
-                Toast.makeText(this, "Se debe cambiar la contraseña por defecto", Toast.LENGTH_SHORT).show()
-            } else if (password.text == confirmPassword.text) {
-                //socketManager.changePassword(password.text.toString())
+            val password: TextView = findViewById(R.id.textView_Contrasena)
+            val confirmPassword: TextView = findViewById(R.id.textView_ConfirmarContrasena)
+
+            if (password.text.isNotEmpty() && confirmPassword.text.isNotEmpty()) {
+                if (password.text.toString() == "Elorrieta00" || confirmPassword.text.toString() == "Elorrieta00") {
+                    Toast.makeText(this, "Se debe cambiar la contraseña por defecto", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (password.text.toString() == confirmPassword.text.toString()) {
+                        socketManager.changePassword(user.text.toString(), password.text.toString())
+                        Toast.makeText(this, "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Se debe ingresar ambas contraseñas", Toast.LENGTH_SHORT).show()
             }
         }
 
-        findViewById<Button>(R.id.button_Registro).setOnClickListener {
-            if (user.text.isNotEmpty() && name.text.isNotEmpty() && surname.text.isNotEmpty() && dni.text.isNotEmpty() &&
-                email.text.isNotEmpty() && telephone.text.isNotEmpty() && telephone2.text.isNotEmpty() &&
-                password.text.isNotEmpty() && confirmPassword.text.isNotEmpty()) {
-                if (password.text == "Elorrieta00") {
-                    Toast.makeText(this, "La contraseña es por defecto", Toast.LENGTH_SHORT).show()
-                } else {
-                   //TODO
-                }
-            } else {
-                Toast.makeText(this, "Todos los campos deben estar informados", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-        }
+//        findViewById<Button>(R.id.button_Registro).setOnClickListener {
+//            if (user.text.isNotEmpty() && name.text.isNotEmpty() && surname.text.isNotEmpty() && dni.text.isNotEmpty() &&
+//                email.text.isNotEmpty() && telephone.text.isNotEmpty() && telephone2.text.isNotEmpty() &&
+//                password.text.isNotEmpty() && confirmPassword.text.isNotEmpty()) {
+//                if (password.text == "Elorrieta00") {
+//                    Toast.makeText(this, "La contraseña es por defecto", Toast.LENGTH_SHORT).show()
+//                } else {
+//                   //TODO
+//                }
+//            } else {
+//                Toast.makeText(this, "Todos los campos deben estar informados", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+//        }
     }
 
     fun preloadInfo(usuario: Usuario?) {
@@ -130,8 +142,8 @@ class MainActivityRegistro : AppCompatActivity() {
         }
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        socketManager.disconnect()
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        socketManager.disconnect()
+    }
 }

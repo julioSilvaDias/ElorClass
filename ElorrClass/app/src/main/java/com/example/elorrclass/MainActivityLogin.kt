@@ -136,10 +136,10 @@ class MainActivityLogin : AppCompatActivity() {
         val userDao = db.UsuarioDao()
         userDao.insert(Usuario(username = username, password = password))
     }*/
-    /*
+
     override fun onDestroy() {
         super.onDestroy()
         socketManager.disconnect()
     }
-    */
+
 }

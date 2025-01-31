@@ -9,7 +9,6 @@ import com.example.elorrclass.socketIO.config.Events
 import com.example.elorrclass.socketIO.model.MessageInput
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
@@ -63,11 +62,16 @@ class SocketManager(private val activity: Activity){
             Log.d(tag, "mesaje recibido: $message")
         }
 
-//        socket.on(Events.ON_CHANGE_PASSWORD_ANSWER.value){ args->
-//            val response = args[0] as JSONObject
-//            val message = response.getString("message")
-//            Log.d(tag, "mesaje recibido: $message")
-//        }
+        socket.on(Events.ON_CHANGE_PASSWORD_ANSWER.value){ args->
+            val response = args[0] as JSONObject
+            val message = response.getString("message")
+            Log.d(tag, "mesaje recibido: $message")
+
+            val gson = Gson()
+            val usuario = gson.fromJson(message, Usuario::class.java)
+            println(usuario)
+            (activity as MainActivityRegistro).preloadInfo(usuario)
+        }
 
     }
     fun getHorario(userId : Int?){
@@ -106,9 +110,9 @@ class SocketManager(private val activity: Activity){
             Log.d(tag, if (it) "Socket is connected" else "Socket is not connected")
         }}
 
-//    fun changePassword(password : String) {
-//        val message = MessageInput(password)
-//        socket.emit(Events.ON_CHANGE_PASSWORD.value, Gson().toJson(message))
-//        Log.d (tag, "datos enviados: -> $message")
-//    }
+    fun changePassword(username: String, password: String) {
+        val userPass = UserPass(username, password)
+        socket.emit(Events.ON_CHANGE_PASSWORD.value, Gson().toJson(userPass))
+        Log.d (tag, "datos enviados: -> $userPass")
+    }
 }
