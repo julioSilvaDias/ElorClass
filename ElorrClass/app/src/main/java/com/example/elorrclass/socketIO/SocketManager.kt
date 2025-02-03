@@ -7,6 +7,7 @@ import com.example.elorrclass.MainActivityRegistro
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
 import com.example.elorrclass.socketIO.model.MessageInput
+import com.example.elorrclass.socketIO.model.UpdateUser
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
 import io.socket.client.IO
@@ -73,6 +74,14 @@ class SocketManager(private val activity: Activity){
             (activity as MainActivityRegistro).preloadInfo(usuario)
         }
 
+        socket.on(Events.ON_REGISTER_ANSWER.value){ args->
+            val response = args[0] as JSONObject
+            val message = response.getString("message")
+            Log.d(tag, "mesaje recibido: $message")
+
+            (activity as MainActivityRegistro).registerAnswer()
+        }
+
     }
     fun getHorario(userId : Int?){
         val message = MessageInput(userId.toString())
@@ -114,5 +123,19 @@ class SocketManager(private val activity: Activity){
         val userPass = UserPass(username, password)
         socket.emit(Events.ON_CHANGE_PASSWORD.value, Gson().toJson(userPass))
         Log.d (tag, "datos enviados: -> $userPass")
+    }
+
+    fun register(
+        user: String,
+        name: String,
+        surname: String,
+        dni: String,
+        email: String,
+        telefono1: String,
+        telefono2: String,
+    ) {
+        val updateUser = UpdateUser(user, name, surname, dni, email, telefono1, telefono2)
+        socket.emit(Events.ON_REGISTER.value, Gson().toJson(updateUser))
+        Log.d (tag, "datos enviados: -> $updateUser")
     }
 }

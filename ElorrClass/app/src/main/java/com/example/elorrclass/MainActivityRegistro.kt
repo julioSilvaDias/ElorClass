@@ -84,14 +84,19 @@ class MainActivityRegistro : AppCompatActivity() {
         findViewById<Button>(R.id.button_Registro).setOnClickListener {
             if (user.text.isNotEmpty() && name.text.isNotEmpty() && surname.text.isNotEmpty() && dni.text.isNotEmpty() &&
                 email.text.isNotEmpty() && telephone.text.isNotEmpty() && telephone2.text.isNotEmpty() &&
-                password.text.isNotEmpty() && confirmPassword.text.isNotEmpty()) {
+                password.text.isNotEmpty()) {
                 if (password.text.toString() == "Elorrieta00" || confirmPassword.text.toString() == "Elorrieta00") {
                     Toast.makeText(this, "La contraseña es por defecto debe cambiarla con el boton change pass", Toast.LENGTH_SHORT).show()
                 } else {
                     if (user.text != usuarioRegister.login && name.text != usuarioRegister.nombre && surname.text != usuarioRegister.apellidos &&
                         dni.text != usuarioRegister.dni && email.text != usuarioRegister.email && telephone.text != usuarioRegister.telefono1 &&
                         telephone2.text != usuarioRegister.telefono2) {
-
+                        socketManager.register(user.text.toString(), name.text.toString(), surname.text.toString(), dni.text.toString(),
+                            email.text.toString(), telephone.text.toString(), telephone2.text.toString())
+                    } else {
+                        val intent = Intent(applicationContext, MainActivityLogin::class.java)
+                        startActivity(intent)
+                        finish()
                     }
                 }
             } else {
@@ -154,6 +159,12 @@ class MainActivityRegistro : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Error de usuario nulo", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun registerAnswer() {
+        val intent = Intent(applicationContext, MainActivityLogin::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onDestroy() {
