@@ -45,6 +45,14 @@ class SocketManager(private val activity: Activity) {
             (activity as? MainActivityLogin)?.handleLoginResponse(message)
         }
 
+        socket.on(Events.ON_RESET_PASSWORD_RESPONSE.value) { args ->
+            val response = args[0] as JSONObject
+            val message = response.getString("message")
+            Log.d("PasswordResetResponse", "Respuesta del servidor: $message")
+
+            (activity as? MainActivityLogin)?.handlePasswordResetResponse(message)
+        }
+
         /*socket.on(Events.ON_RESET_PASSWORD_RESPONSE.value) { args ->
             val response = args[0] as JSONObject
             val success = response.getBoolean("success")
@@ -90,13 +98,11 @@ class SocketManager(private val activity: Activity) {
         Log.d(tag, "Login enviado: $userPass")
     }
 
-    /*fun resetearClave(username: String) {
-        val requestData = JSONObject().apply {
-            put("username", username)
-        }
+    fun resetearClave(requestData: JSONObject) {
         socket.emit(Events.ON_RESET_PASSWORD.value, requestData)
-        Log.d(tag, "Password reset request sent: $requestData")
-    }*/
+        Log.d(tag, "Solicitud de restablecimiento enviada: $requestData")
+    }
+
 
     fun connect() {
         socket.connect()

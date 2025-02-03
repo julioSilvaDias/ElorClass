@@ -49,7 +49,7 @@ class MainActivityLogin : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button_OlvidarClave).setOnClickListener {
-           //mostrarRestablecerClave()
+           mostrarRestablecerClave()
         }
 
         findViewById<Button>(R.id.button_Registrar).setOnClickListener {
@@ -139,69 +139,55 @@ class MainActivityLogin : AppCompatActivity() {
         }
     }
 
-    /*private fun mostrarRestablecerClave() {
+    private fun mostrarRestablecerClave() {
         val dialogView = layoutInflater.inflate(R.layout.activity_resetear_password, null)
-        val usernameEditText = dialogView.findViewById<EditText>(R.id.textView_RestablecerPassword)
+        val emailEditText = dialogView.findViewById<EditText>(R.id.textView_RestablecerPassword)
 
         val alertDialog = AlertDialog.Builder(this)
             .setTitle("Recuperar contraseña")
-            .setMessage("Introduce tu nombre de usuario o correo electrónico para recuperar la contraseña.")
+            .setMessage("Introduce tu correo electrónico para recuperar la contraseña.")
             .setView(dialogView)
             .setPositiveButton("Enviar") { _, _ ->
-                val username = usernameEditText.text.toString()
-                if (username.isNotEmpty()) {
-                    enviarSolicitudParaRestablecerClave(username)
+                val email = emailEditText.text.toString()
+                if (email.isNotEmpty()) {
+                    enviarSolicitudParaRestablecerClave(email)
                 } else {
-                    Toast.makeText(this, "Por favor, ingresa tu usuario", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Por favor, ingresa tu correo", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Cancelar", null)
             .create()
 
         alertDialog.show()
-    }*/
-
-    private suspend fun saveUserToDatabase(username: String, password: String) {
-        val user = Usuario(username = username, password = password, ultimoInicioSesion = true)
-
-        val db = Room.databaseBuilder(applicationContext, AppDataBase::class.java, "user_database")
-            .fallbackToDestructiveMigration()
-            .build()
-
-        val userDao = db.UsuarioDao()
-
-        userDao.resetUltimoInicioSesion()
-
-        userDao.insert(user)
     }
 
-    /*private fun enviarSolicitudParaRestablecerClave(username: String) {
-        if (username.isEmpty()) {
-            showToast("Por favor, ingresa tu usuario")
-            return
-        }
-
+    private fun enviarSolicitudParaRestablecerClave(email: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                Log.d("PasswordReset", "Enviando solicitud para restablecer la clave para el usuario: $username")
+                Log.d("PasswordReset", "Enviando solicitud para restablecer la clave para el correo: $email")
 
-                socketManager.resetearClave(username)
+                val requestData = JSONObject().apply {
+                    put("email", email)
+                }
 
-                Log.d("PasswordReset", "Solicitud de restablecimiento enviada correctamente para el usuario: $username")
+                socketManager.resetearClave(requestData)
+
+                Log.d("PasswordReset", "Solicitud de restablecimiento enviada correctamente para el correo: $email")
 
                 runOnUiThread {
-                    showToast("Solicitud de recuperación enviada correctamente.")
+                    Toast.makeText(this@MainActivityLogin, "Solicitud de recuperación enviada correctamente.", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                Log.e("PasswordReset", "Error al intentar enviar el correo de recuperación", e)
+                Log.e("PasswordReset", "Error al intentar enviar la solicitud de recuperación", e)
                 runOnUiThread {
-                    showToast("No se ha podido enviar el correo de recuperación.")
+                    Toast.makeText(this@MainActivityLogin, "No se ha podido enviar la solicitud. Intenta nuevamente.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-    }*/
+    }
 
-    /*fun handlePasswordResetResponse(response: String) {
+
+    fun handlePasswordResetResponse(response: String) {
         val cleanedResponse = response.trim()
         Log.d("PasswordResetResponse", "Respuesta del servidor: $cleanedResponse")
 
@@ -220,7 +206,7 @@ class MainActivityLogin : AppCompatActivity() {
                     }
 
                     "Login no existe en BBDD remota" -> {
-                        showToast("El login informado no existe en la base de datos.")
+                        showToast("El correo informado no existe en la base de datos.")
                     }
 
                     else -> {
@@ -234,7 +220,21 @@ class MainActivityLogin : AppCompatActivity() {
                 showToast("Ocurrió un error inesperado al procesar la respuesta.")
             }
         }
-    }*/
+    }
+
+    private suspend fun saveUserToDatabase(username: String, password: String) {
+        val user = Usuario(username = username, password = password, ultimoInicioSesion = true)
+
+        val db = Room.databaseBuilder(applicationContext, AppDataBase::class.java, "user_database")
+            .fallbackToDestructiveMigration()
+            .build()
+
+        val userDao = db.UsuarioDao()
+
+        userDao.resetUltimoInicioSesion()
+
+        userDao.insert(user)
+    }
 
     private fun navigateToRegistration(username: String) {
         val intent = Intent(applicationContext, MainActivityRegistro::class.java)
