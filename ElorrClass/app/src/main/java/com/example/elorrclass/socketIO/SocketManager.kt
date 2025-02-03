@@ -4,7 +4,9 @@ import android.app.Activity
 import android.util.Log
 import com.example.elorrclass.MainActivityLogin
 import com.example.elorrclass.MainActivityPanel
+import com.example.elorrclass.MainActivityReuniones
 import com.example.elorrclass.pojos.Horario
+import com.example.elorrclass.pojos.Reunion
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
 import com.example.elorrclass.socketIO.model.MessageInput
@@ -17,7 +19,7 @@ import org.json.JSONObject
 import java.nio.charset.Charset
 
 class SocketManager(private val activity: Activity){
-    private val ipPort = "http://10.5.104.26:5000"
+    private val ipPort = "http://192.168.1.136:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
@@ -67,6 +69,16 @@ class SocketManager(private val activity: Activity){
             (activity as? MainActivityPanel)?.handleHorarioResponse(horarios)
         }
 
+        socket.on(Events.ON_GET_MEETINGS_ANSWER.value){ args ->
+            val response = args[0] as JSONObject
+            val message = response.getString("message")
+
+            val reuniones = Gson().fromJson(message, Array<Reunion>::class.java).toList()
+            println(reuniones)
+            (activity as? MainActivityReuniones)?.handleReunionResponse(reuniones)
+
+        }
+
 
 
     }
@@ -89,6 +101,12 @@ class SocketManager(private val activity: Activity){
         val userPass = UserPass(username, password)
         socket.emit(Events.ON_LOGIN.value, Gson().toJson(userPass))
         Log.d(tag, "Login enviado: $userPass")
+    }
+
+    fun getReuniones(userId: Int?){
+        val message = MessageInput(userId.toString())
+        socket.emit(Events.ON_GET_MEETINGS.value, Gson().toJson(message))
+        Log.d(tag, "Id enviado: $message")
     }
 
     fun connect(){

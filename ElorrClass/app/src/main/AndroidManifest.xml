@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
 
     <application
@@ -18,23 +18,27 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivityReuniones"
+            android:exported="false" />
+        <activity
             android:name=".MainActivityPerfil"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivityPanel"
-            android:screenOrientation="landscape"
-            android:exported="false"/>
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".MainActivityRegistro"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivityLogin"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

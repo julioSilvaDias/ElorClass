@@ -1,10 +1,12 @@
 package com.example.elorrclass
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -59,10 +61,19 @@ class MainActivityPanel : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
+
     }
 
     fun handleUserResponse(usuario: Usuario) {
         socketManager.getHorario(usuario.id)
+
+        findViewById<Button>(R.id.button_VerReuniones).setOnClickListener{
+            val intent = Intent(applicationContext, MainActivityReuniones::class.java)
+            intent.putExtra("userId", usuario.id)
+            intent.putExtra("userName", usuario.login)
+            startActivity(intent)
+            finish()
+        }
     }
 
     fun handleHorarioResponse(nuevosHorarios: List<Horario>) {
@@ -135,6 +146,11 @@ class MainActivityPanel : AppCompatActivity() {
                 textViews[i][j]?.height = alturasFilas[i]
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        socketManager.disconnect()
     }
 }
 
