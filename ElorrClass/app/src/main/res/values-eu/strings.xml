@@ -27,6 +27,10 @@
     <string name="botonVerReuniones">BILERAK</string>
     <string name="botonMensajes">MEZUAK</string>
     <string name="botonVerPDF">PDF</string>
+    <string name="btnVolverReunion">Itzuli</string>
+    <string name="btnEstadoReunion">Estatua</string>
+    <string name="btnCrearReunion">Sortu</string>
+
     //Profile
     <string name="switchCambioTema">Gaia aldatu</string>
     <string name="cambiarIdioma">Idioma</string>

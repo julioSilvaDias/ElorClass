@@ -27,6 +27,9 @@
     <string name="botonVerReuniones">REUNIONES</string>
     <string name="botonMensajes">MENSAJES</string>
     <string name="botonVerPDF">PDF</string>
+    <string name="btnVolverReunion">Volver</string>
+    <string name="btnEstadoReunion">Estado</string>
+    <string name="btnCrearReunion">Crear</string>
     //Profile
     <string name="switchCambioTema">Cambiar tema</string>
     <string name="cambiarIdioma">Idioma</string>
@@ -34,6 +37,7 @@
     <string name="botonCambioDeClave">Cambiar Clave</string>
     <string name="nuevaClave">Nueva Clave:</string>
     <string name="confirmarNuevaClave">Confirmar nueva clave:</string>
+
     <string-array name="changeLanguage">
         <item>Inglés</item>
         <item>Español</item>

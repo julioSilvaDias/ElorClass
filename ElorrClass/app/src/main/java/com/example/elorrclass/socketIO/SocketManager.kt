@@ -2,33 +2,37 @@ package com.example.elorrclass.socketIO
 
 import android.app.Activity
 import android.util.Log
+import bbdd.pojos.Reunion
 import com.example.elorrclass.MainActivityLogin
 import com.example.elorrclass.MainActivityPanel
 import com.example.elorrclass.MainActivityReuniones
+import com.example.elorrclass.TimestampAdapter
 import com.example.elorrclass.pojos.Horario
-import com.example.elorrclass.pojos.Reunion
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
 import com.example.elorrclass.socketIO.model.MessageInput
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.nio.charset.Charset
+import java.sql.Timestamp
 
-class SocketManager(private val activity: Activity){
-    private val ipPort = "http://192.168.1.136:5000"
+class SocketManager(private val activity: Activity) {
+    private val ipPort = "http://10.5.104.26:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
-    init{
-        socket.on(Socket.EVENT_CONNECT){
+    init {
+        socket.on(Socket.EVENT_CONNECT) {
             Log.d(tag, "Conneted...")
         }
 
-        socket.on(Socket.EVENT_DISCONNECT){
+        socket.on(Socket.EVENT_DISCONNECT) {
             Log.d(tag, "Disconnected")
         }
 
@@ -50,7 +54,7 @@ class SocketManager(private val activity: Activity){
             (activity as? MainActivityLogin)?.handleLoginResponse(message)
         }
 
-        socket.on(Events.ON_GET_USER_ID_ANSWER.value){ args->
+        socket.on(Events.ON_GET_USER_ID_ANSWER.value) { args ->
             val response = args[0] as JSONObject
             val message = response.getString("message")
             Log.d("Socket", "Mensaje recibido: $message")
@@ -69,29 +73,34 @@ class SocketManager(private val activity: Activity){
             (activity as? MainActivityPanel)?.handleHorarioResponse(horarios)
         }
 
-        socket.on(Events.ON_GET_MEETINGS_ANSWER.value){ args ->
+        socket.on(Events.ON_GET_MEETINGS_ANSWER.value) { args ->
             val response = args[0] as JSONObject
             val message = response.getString("message")
+            Log.d(tag, message)
 
-            val reuniones = Gson().fromJson(message, Array<Reunion>::class.java).toList()
-            println(reuniones)
+            val gson = GsonBuilder()
+                .registerTypeAdapter(Timestamp::class.java, TimestampAdapter())
+                .create()
+
+            val listType = object : TypeToken<List<Reunion>>() {}.type
+            val reuniones = gson.fromJson<List<Reunion>>(message, listType)
             (activity as? MainActivityReuniones)?.handleReunionResponse(reuniones)
-
         }
 
-
-
     }
-    fun getHorario(userId : Int?){
+
+    fun getHorario(userId: Int?) {
         val message = MessageInput(userId.toString())
         socket.emit(Events.ON_GET_HORARIO.value, Gson().toJson(message))
-        Log.d (tag, "datos enviados: -> $message")
+        Log.d(tag, "datos enviados: -> $message")
     }
-    fun getUserId(username: String){
+
+    fun getUserId(username: String) {
         val userPass = UserPass(username, "")
         socket.emit(Events.ON_GET_USER_ID.value, Gson().toJson(userPass))
         Log.d(tag, "Username enviado: $userPass")
     }
+
     fun loginUsuario(username: String, password: String) {
         //val loginData = JSONObject().apply {
         //    put("login", username)
@@ -103,13 +112,13 @@ class SocketManager(private val activity: Activity){
         Log.d(tag, "Login enviado: $userPass")
     }
 
-    fun getReuniones(userId: Int?){
+    fun getReuniones(userId: Int?) {
         val message = MessageInput(userId.toString())
         socket.emit(Events.ON_GET_MEETINGS.value, Gson().toJson(message))
         Log.d(tag, "Id enviado: $message")
     }
 
-    fun connect(){
+    fun connect() {
         socket.connect()
         Log.d(tag, "connecting to server....")
     }
@@ -122,5 +131,6 @@ class SocketManager(private val activity: Activity){
     fun isConnected(): Boolean {
         return socket.connected().also {
             Log.d(tag, if (it) "Socket is connected" else "Socket is not connected")
-        }}
+        }
+    }
 }

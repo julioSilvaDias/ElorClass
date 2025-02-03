@@ -7,4 +7,6 @@
     <color name="PANTONE3135C">#008aab</color>
     <color name="PANTONE298C">#3cb4e5</color>
     <color name="GRIS">#545454</color>
+    <color name="gray">#757575</color>
+
 </resources>

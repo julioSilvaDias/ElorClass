@@ -26,6 +26,9 @@
     <string name="botonVerReuniones">MEETINGS</string>
     <string name="botonMensajes">MESSAGES</string>
     <string name="botonVerPDF">PDF</string>
+    <string name="btnVolverReunion">Back</string>
+    <string name="btnEstadoReunion">Status</string>
+    <string name="btnCrearReunion">Create</string>
     //Profile
     <string name="switchCambioTema">Change theme</string>
     <string name="cambiarIdioma">Idioma</string>
