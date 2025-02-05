@@ -1,4 +1,4 @@
-package com.example.elorrclass
+package com.example.elorrclass.adapter
 
 import com.google.gson.*
 import java.lang.reflect.Type

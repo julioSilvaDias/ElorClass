@@ -62,4 +62,7 @@ dependencies {
     implementation(libs.engine.io.client)
     // GSON
     implementation(libs.gson)
+    //Google Maps
+    implementation (libs.playServicesMaps)
+
 }

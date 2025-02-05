@@ -1,12 +1,15 @@
 package com.example.elorrclass.socketIO
 
+import CustomSqlDateAdapter
 import android.app.Activity
 import android.util.Log
 import bbdd.pojos.Reunion
+import com.example.elorrclass.MainActivityCursosExternos
 import com.example.elorrclass.MainActivityLogin
 import com.example.elorrclass.MainActivityPanel
 import com.example.elorrclass.MainActivityReuniones
-import com.example.elorrclass.TimestampAdapter
+import com.example.elorrclass.adapter.TimestampAdapter
+import com.example.elorrclass.pojos.CursosExternos
 import com.example.elorrclass.pojos.Horario
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
@@ -14,16 +17,15 @@ import com.example.elorrclass.socketIO.model.MessageInput
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
-import java.nio.charset.Charset
+import java.sql.Date
 import java.sql.Timestamp
 
 class SocketManager(private val activity: Activity) {
-    private val ipPort = "http://192.168.0.21:5000"
+    private val ipPort = "http://10.5.104.26:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
@@ -87,6 +89,22 @@ class SocketManager(private val activity: Activity) {
             (activity as? MainActivityReuniones)?.handleReunionResponse(reuniones)
         }
 
+        socket.on(Events.ON_GET_ALL_CURSOS_ANSWER.value) { args ->
+            val reponse = args[0] as JSONObject
+            val message = reponse.getString("message")
+            Log.d(tag, message)
+
+            val gson = GsonBuilder()
+                .registerTypeAdapter(Date::class.java, CustomSqlDateAdapter())
+                .create()
+
+            val listType = object : TypeToken<List<CursosExternos>>() {}.type
+            val cursosExternos = gson.fromJson<List<CursosExternos>>(message, listType)
+            println(cursosExternos)
+            (activity as? MainActivityCursosExternos)?.handleCursosExternosResponse(cursosExternos)
+
+        }
+
     }
 
     fun getHorario(userId: Int?) {
@@ -102,11 +120,6 @@ class SocketManager(private val activity: Activity) {
     }
 
     fun loginUsuario(username: String, password: String) {
-        //val loginData = JSONObject().apply {
-        //    put("login", username)
-        //   put("password", password)
-        //}
-
         val userPass = UserPass(username, password)
         socket.emit(Events.ON_LOGIN.value, Gson().toJson(userPass))
         Log.d(tag, "Login enviado: $userPass")
@@ -116,6 +129,11 @@ class SocketManager(private val activity: Activity) {
         val message = MessageInput(userId.toString())
         socket.emit(Events.ON_GET_MEETINGS.value, Gson().toJson(message))
         Log.d(tag, "Id enviado: $message")
+    }
+
+    fun getAllCursos() {
+        val message = MessageInput("")
+        socket.emit(Events.ON_GET_ALL_CURSOS.value, Gson().toJson(message))
     }
 
     fun connect() {

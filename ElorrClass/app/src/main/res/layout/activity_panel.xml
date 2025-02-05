@@ -81,12 +81,12 @@
         android:layout_height="wrap_content"
         android:text="@string/botonVerPDF"
         app:layout_constraintBottom_toTopOf="@+id/guideline16"
-        app:layout_constraintEnd_toStartOf="@+id/button_VerMensajes"
+        app:layout_constraintEnd_toStartOf="@+id/button_cursosExternos"
         app:layout_constraintStart_toEndOf="@+id/button_VerReuniones"
         app:layout_constraintTop_toBottomOf="@+id/gridLayoutHorario" />
 
     <Button
-        android:id="@+id/button_VerMensajes"
+        android:id="@+id/button_cursosExternos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/botonMensajes"

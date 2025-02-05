@@ -7,6 +7,7 @@ import android.widget.ListView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import bbdd.pojos.Reunion
+import com.example.elorrclass.adapter.ReunionAdapter
 import com.example.elorrclass.socketIO.SocketManager
 
 class MainActivityReuniones : AppCompatActivity() {

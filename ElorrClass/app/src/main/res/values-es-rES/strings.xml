@@ -25,11 +25,12 @@
     <string name="botonOlvidarContrasena">Restablecer clave</string>
     <string name="cambiarContrasena">CAMBIAR CLAVE</string>
     <string name="botonVerReuniones">REUNIONES</string>
-    <string name="botonMensajes">MENSAJES</string>
+    <string name="botonMensajes">Cursos Externos</string>
     <string name="botonVerPDF">PDF</string>
     <string name="btnVolverReunion">Volver</string>
     <string name="btnEstadoReunion">Estado</string>
     <string name="btnCrearReunion">Crear</string>
+    <string name="btnVerCursos">Ver cursos</string>
     //Profile
     <string name="switchCambioTema">Cambiar tema</string>
     <string name="cambiarIdioma">Idioma</string>

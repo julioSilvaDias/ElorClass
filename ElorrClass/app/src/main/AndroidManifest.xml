@@ -18,6 +18,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivityVerCurso"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivityCursosExternos"
+            android:exported="false" />
+        <activity
             android:name=".MainActivityCrearReunion"
             android:exported="false" />
         <activity

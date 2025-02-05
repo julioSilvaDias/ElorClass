@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -39,7 +40,7 @@ class MainActivityPanel : AppCompatActivity() {
         socketManager.connect()
 
         val username = intent.getStringExtra("username")
-        if(username != null){
+        if (username != null) {
             socketManager.getUserId(username)
         }
 
@@ -52,9 +53,14 @@ class MainActivityPanel : AppCompatActivity() {
             spinnerSemana.adapter = adapter
         }
 
-        spinnerSemana.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long ){
-                semanaSeleccionada = position +1
+        spinnerSemana.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: android.view.View?,
+                position: Int,
+                id: Long
+            ) {
+                semanaSeleccionada = position + 1
                 actualizarTabla()
             }
 
@@ -65,14 +71,40 @@ class MainActivityPanel : AppCompatActivity() {
     }
 
     fun handleUserResponse(usuario: Usuario) {
-        socketManager.getHorario(usuario.id)
+        runOnUiThread {
+            socketManager.getHorario(usuario.id)
+            val buttonVerReuniones = findViewById<Button>(R.id.button_VerReuniones)
+            val buttonPdf = findViewById<Button>(R.id.button_Pdf)
+            val buttonCursos = findViewById<Button>(R.id.button_cursosExternos)
 
-        findViewById<Button>(R.id.button_VerReuniones).setOnClickListener{
-            val intent = Intent(applicationContext, MainActivityReuniones::class.java)
-            intent.putExtra("userId", usuario.id)
-            intent.putExtra("username", usuario.login)
-            startActivity(intent)
-            finish()
+            if (usuario.tipoUsuario == "Profesor") {
+                buttonVerReuniones.visibility = View.VISIBLE
+                buttonPdf.visibility = View.GONE
+                buttonCursos.visibility = View.GONE
+            } else if (usuario.tipoUsuario == "Alumno") {
+                buttonVerReuniones.visibility = View.GONE
+                buttonPdf.visibility = View.VISIBLE
+                buttonCursos.visibility = View.VISIBLE
+            } else {
+                buttonVerReuniones.visibility = View.GONE
+                buttonPdf.visibility = View.GONE
+                buttonCursos.visibility = View.GONE
+            }
+
+            buttonCursos.setOnClickListener{
+                val intent = Intent(applicationContext, MainActivityCursosExternos::class.java)
+                intent.putExtra("username", usuario.login)
+                startActivity(intent)
+                finish()
+            }
+
+            buttonVerReuniones.setOnClickListener{
+                val intent = Intent(applicationContext, MainActivityReuniones::class.java)
+                intent.putExtra("userId", usuario.id)
+                intent.putExtra("username", usuario.login)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
@@ -84,7 +116,7 @@ class MainActivityPanel : AppCompatActivity() {
         }
     }
 
-    private fun actualizarTabla(){
+    private fun actualizarTabla() {
         gridLayoutHorario.removeAllViews()
 
         val filas = 6
@@ -93,12 +125,12 @@ class MainActivityPanel : AppCompatActivity() {
         val anchoPantalla = resources.displayMetrics.widthPixels
         val anchoCelda = anchoPantalla / columnas
 
-        val matriz = Array(filas){ arrayOfNulls<String>(columnas) }
+        val matriz = Array(filas) { arrayOfNulls<String>(columnas) }
 
-        for(horario in horarios){
-            if(horario.semana == semanaSeleccionada){
-                val fila = horario.hora?.toInt()?.minus(1) ?:0
-                val columna = when (horario.dia){
+        for (horario in horarios) {
+            if (horario.semana == semanaSeleccionada) {
+                val fila = horario.hora?.toInt()?.minus(1) ?: 0
+                val columna = when (horario.dia) {
                     "Lunes" -> 0
                     "Martes" -> 1
                     "Miércoles" -> 2
@@ -108,17 +140,17 @@ class MainActivityPanel : AppCompatActivity() {
                     else -> continue
                 }
 
-                matriz[fila][columna] = horario.asignatura?: "Sin asignatura"
+                matriz[fila][columna] = horario.asignatura ?: "Sin asignatura"
             }
         }
 
-        val alturasFilas = IntArray(filas){0}
-        val textViews = Array(filas) {arrayOfNulls<TextView>(columnas)}
+        val alturasFilas = IntArray(filas) { 0 }
+        val textViews = Array(filas) { arrayOfNulls<TextView>(columnas) }
 
-        for(i in 0 until 6){
-            for(j in 0 until 5){
+        for (i in 0 until 6) {
+            for (j in 0 until 5) {
                 val textView = TextView(this)
-                textView.text = matriz[i][j]?:""
+                textView.text = matriz[i][j] ?: ""
                 textView.textSize = 14f
                 textView.gravity = Gravity.CENTER
                 textView.setPadding(8)
@@ -131,18 +163,18 @@ class MainActivityPanel : AppCompatActivity() {
                 textView.layoutParams = GridLayout.LayoutParams().apply {
                     width = anchoCelda
                     height = GridLayout.LayoutParams.WRAP_CONTENT
-                    setMargins(4,4,4,4)
+                    setMargins(4, 4, 4, 4)
                 }
 
-                textViews[i][j]=textView
+                textViews[i][j] = textView
                 gridLayoutHorario.addView(textView)
-                textView.measure(0,0)
+                textView.measure(0, 0)
                 alturasFilas[i] = maxOf(alturasFilas[i], textView.measuredHeight)
             }
         }
 
-        for(i in 0 until filas){
-            for(j in 0 until  columnas){
+        for (i in 0 until filas) {
+            for (j in 0 until columnas) {
                 textViews[i][j]?.height = alturasFilas[i]
             }
         }
