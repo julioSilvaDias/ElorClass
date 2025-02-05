@@ -23,7 +23,7 @@ import java.nio.charset.Charset
 import java.sql.Timestamp
 
 class SocketManager(private val activity: Activity) {
-    private val ipPort = "http://10.5.104.26:5000"
+    private val ipPort = "http://192.168.0.21:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 

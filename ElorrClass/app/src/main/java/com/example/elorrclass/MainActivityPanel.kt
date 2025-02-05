@@ -70,7 +70,7 @@ class MainActivityPanel : AppCompatActivity() {
         findViewById<Button>(R.id.button_VerReuniones).setOnClickListener{
             val intent = Intent(applicationContext, MainActivityReuniones::class.java)
             intent.putExtra("userId", usuario.id)
-            intent.putExtra("userName", usuario.login)
+            intent.putExtra("username", usuario.login)
             startActivity(intent)
             finish()
         }
