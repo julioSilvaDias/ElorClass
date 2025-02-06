@@ -93,7 +93,7 @@ class MainActivityLogin : AppCompatActivity() {
                     }
 
                     "El usuario debe de registrarse." -> {
-                        Toast.makeText(this, "El usuario debe registrarse para cambiar la contraseña", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "El usuario debe registrarse y cambiar la contraseña", Toast.LENGTH_SHORT).show()
                         val username = findViewById<EditText>(R.id.textView_IngresarUsuario).text.toString()
                         val intent = Intent(applicationContext, MainActivityRegistro::class.java)
                         intent.putExtra("username", username)
@@ -136,10 +136,10 @@ class MainActivityLogin : AppCompatActivity() {
         val userDao = db.UsuarioDao()
         userDao.insert(Usuario(username = username, password = password))
     }*/
-    /*
+
     override fun onDestroy() {
         super.onDestroy()
         socketManager.disconnect()
     }
-    */
+
 }

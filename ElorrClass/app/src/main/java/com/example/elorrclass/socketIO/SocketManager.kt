@@ -6,6 +6,7 @@ import android.util.Log
 import bbdd.pojos.Reunion
 import com.example.elorrclass.MainActivityCursosExternos
 import com.example.elorrclass.MainActivityLogin
+import com.example.elorrclass.MainActivityRegistro
 import com.example.elorrclass.MainActivityPanel
 import com.example.elorrclass.MainActivityReuniones
 import com.example.elorrclass.adapter.TimestampAdapter
@@ -14,6 +15,7 @@ import com.example.elorrclass.pojos.Horario
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
 import com.example.elorrclass.socketIO.model.MessageInput
+import com.example.elorrclass.socketIO.model.UpdateUser
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -64,6 +66,8 @@ class SocketManager(private val activity: Activity) {
             val gson = Gson()
             val usuario = gson.fromJson(message, Usuario::class.java)
             (activity as? MainActivityPanel)?.handleUserResponse(usuario)
+            println(usuario)
+            (activity as MainActivityRegistro).preloadInfo(usuario)
         }
 
         socket.on(Events.ON_GET_HORARIO_ANSWER.value) { args ->
@@ -103,6 +107,25 @@ class SocketManager(private val activity: Activity) {
             println(cursosExternos)
             (activity as? MainActivityCursosExternos)?.handleCursosExternosResponse(cursosExternos)
 
+        }
+
+        socket.on(Events.ON_CHANGE_PASSWORD_ANSWER.value){ args->
+            val response = args[0] as JSONObject
+            val message = response.getString("message")
+            Log.d(tag, "mesaje recibido: $message")
+
+            val gson = Gson()
+            val usuario = gson.fromJson(message, Usuario::class.java)
+            println(usuario)
+            (activity as MainActivityRegistro).preloadInfo(usuario)
+        }
+
+        socket.on(Events.ON_REGISTER_ANSWER.value){ args->
+            val response = args[0] as JSONObject
+            val message = response.getString("message")
+            Log.d(tag, "mesaje recibido: $message")
+
+            (activity as MainActivityRegistro).registerAnswer()
         }
 
     }
@@ -149,6 +172,25 @@ class SocketManager(private val activity: Activity) {
     fun isConnected(): Boolean {
         return socket.connected().also {
             Log.d(tag, if (it) "Socket is connected" else "Socket is not connected")
-        }
+        }}
+
+    fun changePassword(username: String, password: String) {
+        val userPass = UserPass(username, password)
+        socket.emit(Events.ON_CHANGE_PASSWORD.value, Gson().toJson(userPass))
+        Log.d (tag, "datos enviados: -> $userPass")
+    }
+
+    fun register(
+        user: String,
+        name: String,
+        surname: String,
+        dni: String,
+        email: String,
+        telefono1: String,
+        telefono2: String,
+    ) {
+        val updateUser = UpdateUser(user, name, surname, dni, email, telefono1, telefono2)
+        socket.emit(Events.ON_REGISTER.value, Gson().toJson(updateUser))
+        Log.d (tag, "datos enviados: -> $updateUser")
     }
 }
