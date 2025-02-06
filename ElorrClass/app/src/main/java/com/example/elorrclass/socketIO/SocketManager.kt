@@ -3,6 +3,7 @@ package com.example.elorrclass.socketIO
 import android.app.Activity
 import android.util.Log
 import com.example.elorrclass.MainActivityLogin
+import com.example.elorrclass.MainActivityPerfil
 import com.example.elorrclass.MainActivityRegistro
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.config.Events
@@ -55,6 +56,7 @@ class SocketManager(private val activity: Activity){
             val usuario = gson.fromJson(message, Usuario::class.java)
             println(usuario)
             (activity as MainActivityRegistro).preloadInfo(usuario)
+            (activity as MainActivityPerfil).changePassword(usuario)
         }
 
         socket.on(Events.ON_GET_HORARIO_ANSWER.value){ args->

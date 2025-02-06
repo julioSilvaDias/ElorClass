@@ -9,10 +9,15 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.Switch
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.elorrclass.pojos.Usuario
+import com.example.elorrclass.socketIO.SocketManager
 import com.example.elorrclass.util.ThemesUtils
+import org.w3c.dom.Text
 import java.util.Locale
 
 class MainActivityPerfil : AppCompatActivity() {
@@ -20,11 +25,16 @@ class MainActivityPerfil : AppCompatActivity() {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var switchCambioTema: Switch
     private lateinit var spinnerChangeLanguage: Spinner
+    private lateinit var socketManager: SocketManager
+    lateinit var usuario: Usuario
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_perfil)
+
+        socketManager = SocketManager(this)
+        socketManager.connect()
 
         spinnerChangeLanguage = findViewById(R.id.spinner)
         switchCambioTema = findViewById(R.id.switch_CambioTema)
@@ -58,8 +68,17 @@ class MainActivityPerfil : AppCompatActivity() {
             finish()
         }
 
+        /*val username = intent.getStringExtra("username")
+        if (username != null) {
+            socketManager.getUserId(username)
+        }*/
+
+        socketManager.getUserId("alumno1")
+
         setUpSpinner()
     }
+
+
 
     private fun setUpSpinner() {
         val themesUtils = ThemesUtils()
@@ -96,5 +115,35 @@ class MainActivityPerfil : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
+    }
+
+    fun changePassword(usuario: Usuario?) {
+        if (usuario != null) {
+            findViewById<Button>(R.id.button_CambioDeClave).setOnClickListener {
+                val currentPassword = findViewById<TextView>(R.id.textView_IngresarClaveActual)
+                val newPassword = findViewById<TextView>(R.id.textView_IngresarNuevaClave)
+                val confirmPassword = findViewById<TextView>(R.id.textView_ConfirmarNuevaClave)
+
+                if (currentPassword.text.isNotEmpty() && newPassword.text.isNotEmpty() && confirmPassword.text.isNotEmpty()) {
+                    if (currentPassword.text != usuario.password) {
+                        Toast.makeText(this, "No coinciden la contraseña actual", Toast.LENGTH_SHORT).show()
+                    } else {
+                        if (newPassword.text.toString() == "Elorrieta00" || confirmPassword.text.toString() == "Elorrieta00") {
+                            Toast.makeText(this, "La contraseña debe ser diferente a la de por defecto", Toast.LENGTH_SHORT).show()
+                        } else {
+                            if (newPassword.text.toString() == confirmPassword.text.toString()) {
+                                socketManager.changePassword(usuario.nombre.toString(), newPassword.text.toString())
+                                Toast.makeText(this, "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "Se debe ingresar las contraseñas", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
 }

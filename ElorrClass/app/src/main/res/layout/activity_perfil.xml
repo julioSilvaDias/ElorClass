@@ -111,7 +111,8 @@
         app:layout_constraintEnd_toStartOf="@+id/button_VolverPanel"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline20" />
+        app:layout_constraintTop_toTopOf="@+id/guideline20"
+        app:layout_constraintVertical_bias="0.489" />
 
     <EditText
         android:id="@+id/textView_ConfirmarNuevaClave"
