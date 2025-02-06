@@ -1,6 +1,7 @@
 package com.example.elorrclass.socketIO.model
 
 data class UpdateUser(
+    private val foto: String,
     private val user: String,
     private val name: String,
     private val surname: String,

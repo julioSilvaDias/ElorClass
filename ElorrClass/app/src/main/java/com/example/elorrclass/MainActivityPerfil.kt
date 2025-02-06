@@ -1,7 +1,10 @@
 package com.example.elorrclass
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,10 +12,14 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.Switch
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import com.example.elorrclass.util.ThemesUtils
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class MainActivityPerfil : AppCompatActivity() {
@@ -59,6 +66,7 @@ class MainActivityPerfil : AppCompatActivity() {
         }
 
         setUpSpinner()
+
     }
 
     private fun setUpSpinner() {

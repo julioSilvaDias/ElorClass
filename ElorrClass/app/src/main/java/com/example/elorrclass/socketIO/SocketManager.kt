@@ -181,6 +181,7 @@ class SocketManager(private val activity: Activity) {
     }
 
     fun register(
+        foto: String,
         user: String,
         name: String,
         surname: String,
@@ -189,7 +190,7 @@ class SocketManager(private val activity: Activity) {
         telefono1: String,
         telefono2: String,
     ) {
-        val updateUser = UpdateUser(user, name, surname, dni, email, telefono1, telefono2)
+        val updateUser = UpdateUser(foto, user, name, surname, dni, email, telefono1, telefono2)
         socket.emit(Events.ON_REGISTER.value, Gson().toJson(updateUser))
         Log.d (tag, "datos enviados: -> $updateUser")
     }

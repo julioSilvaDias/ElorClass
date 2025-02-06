@@ -1,32 +1,45 @@
 package com.example.elorrclass
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.SocketManager
+import java.io.ByteArrayOutputStream
+import android.util.Base64
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivityRegistro : AppCompatActivity() {
 
     private lateinit var socketManager: SocketManager
-    private lateinit var user : TextView
-    private lateinit var name : TextView
-    private lateinit var surname : TextView
-    private lateinit var dni : TextView
-    private lateinit var email  : TextView
-    private lateinit var telephone : TextView
-    private lateinit var telephone2 : TextView
-    private lateinit var password : TextView
-    private lateinit var confirmPassword : TextView
-    private lateinit var usuarioRegister : Usuario
+    private lateinit var user: TextView
+    private lateinit var name: TextView
+    private lateinit var surname: TextView
+    private lateinit var dni: TextView
+    private lateinit var email: TextView
+    private lateinit var telephone: TextView
+    private lateinit var telephone2: TextView
+    private lateinit var password: TextView
+    private lateinit var confirmPassword: TextView
+    private lateinit var usuarioRegister: Usuario
     private lateinit var trainingCycle: TextView
     private lateinit var courses: TextView
     private lateinit var intensiveDual: TextView
+    private lateinit var imageBase64: String
+    private val CAPTURA_IMAGEN = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,32 +80,56 @@ class MainActivityRegistro : AppCompatActivity() {
 
             if (password.text.isNotEmpty() && confirmPassword.text.isNotEmpty()) {
                 if (password.text.toString() == "Elorrieta00" || confirmPassword.text.toString() == "Elorrieta00") {
-                    Toast.makeText(this, "Se debe cambiar la contraseña por defecto", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Se debe cambiar la contraseña por defecto",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     if (password.text.toString() == confirmPassword.text.toString()) {
                         socketManager.changePassword(user.text.toString(), password.text.toString())
-                        Toast.makeText(this, "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Contraseña cambiada correctamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } else {
-                Toast.makeText(this, "Se debe ingresar ambas contraseñas", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Se debe ingresar ambas contraseñas", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
         findViewById<Button>(R.id.button_Registro).setOnClickListener {
             if (user.text.isNotEmpty() && name.text.isNotEmpty() && surname.text.isNotEmpty() && dni.text.isNotEmpty() &&
                 email.text.isNotEmpty() && telephone.text.isNotEmpty() && telephone2.text.isNotEmpty() &&
-                password.text.isNotEmpty()) {
+                password.text.isNotEmpty()
+            ) {
                 if (password.text.toString() == "Elorrieta00" || confirmPassword.text.toString() == "Elorrieta00") {
-                    Toast.makeText(this, "La contraseña es por defecto debe cambiarla con el boton change pass", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "La contraseña es por defecto debe cambiarla con el boton change pass",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     if (user.text != usuarioRegister.login && name.text != usuarioRegister.nombre && surname.text != usuarioRegister.apellidos &&
                         dni.text != usuarioRegister.dni && email.text != usuarioRegister.email && telephone.text != usuarioRegister.telefono1 &&
-                        telephone2.text != usuarioRegister.telefono2) {
-                        socketManager.register(user.text.toString(), name.text.toString(), surname.text.toString(), dni.text.toString(),
-                            email.text.toString(), telephone.text.toString(), telephone2.text.toString())
+                        telephone2.text != usuarioRegister.telefono2
+                    ) {
+                        socketManager.register(
+                            imageBase64,
+                            user.text.toString(),
+                            name.text.toString(),
+                            surname.text.toString(),
+                            dni.text.toString(),
+                            email.text.toString(),
+                            telephone.text.toString(),
+                            telephone2.text.toString()
+                        )
                     } else {
                         val intent = Intent(applicationContext, MainActivityLogin::class.java)
                         startActivity(intent)
@@ -100,11 +137,37 @@ class MainActivityRegistro : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "Todos los campos deben estar informados", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Todos los campos deben estar informados", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
         }
+
+        findViewById<ImageView>(R.id.imageView_Avatar).setOnClickListener {
+            val fotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(fotoIntent, CAPTURA_IMAGEN)
+        }
+
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == CAPTURA_IMAGEN && resultCode == RESULT_OK) {
+            val imagen = data?.extras?.get("data") as? Bitmap
+            findViewById<ImageView>(R.id.imageView_Avatar).setImageBitmap(imagen)
+
+            imageBase64 = bitmapToBase64(imagen)
+        }
+    }
+
+    fun bitmapToBase64(bitmap: Bitmap?): String {
+        val outputStream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        val byteArray = outputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
 
     fun preloadInfo(usuario: Usuario?) {
         if (usuario != null) {
@@ -151,8 +214,7 @@ class MainActivityRegistro : AppCompatActivity() {
                     trainingCycle.visibility = View.INVISIBLE
                     courses.visibility = View.INVISIBLE
                     intensiveDual.visibility = View.INVISIBLE
-                }
-                else {
+                } else {
                     Toast.makeText(this, "Información incompleta", Toast.LENGTH_SHORT).show()
                 }
             }
