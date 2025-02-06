@@ -21,53 +21,48 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="351dp"
         android:layout_height="293dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnVolverCurso"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvContactoDetail" />
 
     <TextView
         android:id="@+id/tvDescripcionDetail"
-        android:layout_width="140dp"
-        android:layout_height="31dp"
-        android:layout_marginEnd="230dp"
+        android:layout_width="384dp"
+        android:layout_height="34dp"
         android:text="Descripción"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvFechaInicioDetail"
+        app:layout_constraintBottom_toTopOf="@+id/tvHorarioDetail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTituloDetail" />
 
     <TextView
         android:id="@+id/tvHorarioDetail"
-        android:layout_width="123dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="250dp"
+        android:layout_width="382dp"
+        android:layout_height="36dp"
         android:text="Horario"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvContactoDetail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFechaInicioDetail" />
-
-    <TextView
-        android:id="@+id/tvFechaInicioDetail"
-        android:layout_width="197dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="180dp"
-        android:text="Fecha de inicio"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvHorarioDetail"
+        app:layout_constraintBottom_toTopOf="@+id/tvFechaInicioDetail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDescripcionDetail" />
 
     <TextView
+        android:id="@+id/tvFechaInicioDetail"
+        android:layout_width="385dp"
+        android:layout_height="38dp"
+        android:text="Fecha de inicio"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvContactoDetail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHorarioDetail" />
+
+    <TextView
         android:id="@+id/tvTituloDetail"
-        android:layout_width="110dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="260dp"
+        android:layout_width="150dp"
+        android:layout_height="47dp"
         android:text="Título"
         android:textSize="34sp"
         android:textStyle="bold"
@@ -78,15 +73,22 @@
 
     <TextView
         android:id="@+id/tvContactoDetail"
-        android:layout_width="123dp"
-        android:layout_height="29dp"
-        android:layout_marginEnd="250dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="371dp"
+        android:layout_height="33dp"
         android:text="Contacto"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/mapFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHorarioDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/tvFechaInicioDetail" />
+
+    <Button
+        android:id="@+id/btnVolverCurso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/botonVolver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapFragment"
+        tools:layout_editor_absoluteX="160dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

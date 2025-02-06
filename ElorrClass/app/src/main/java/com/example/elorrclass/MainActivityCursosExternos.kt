@@ -23,6 +23,8 @@ class MainActivityCursosExternos : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main_cursos_externos)
 
+        val username = intent.getStringExtra("username")
+
         adapter = CursoExternosAdapter(this, ArrayList())
         val listView = findViewById<ListView>(R.id.listView2)
         listView.adapter = adapter
@@ -32,22 +34,30 @@ class MainActivityCursosExternos : AppCompatActivity() {
 
         listView.setOnItemClickListener { parent, view, position, id ->
             selectedCurso = adapter.getItem(position)
-            btnVerCurso.isEnabled= true
+            btnVerCurso.isEnabled = true
         }
 
-        btnVerCurso.setOnClickListener{
-            selectedCurso?.let { curso->
+        btnVerCurso.setOnClickListener {
+            selectedCurso?.let { curso ->
                 val intent = Intent(this, MainActivityVerCurso::class.java)
                 intent.putExtra("selectedCurso", curso)
+                startActivity(intent)
             }
+        }
+
+        findViewById<Button>(R.id.button).setOnClickListener {
+            val intent = Intent(applicationContext, MainActivityPanel::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+            finish()
         }
 
         socketManager.connect()
         socketManager.getAllCursos()
     }
 
-    fun handleCursosExternosResponse(cursosExternos: List<CursosExternos>){
-        runOnUiThread{
+    fun handleCursosExternosResponse(cursosExternos: List<CursosExternos>) {
+        runOnUiThread {
             (adapter as CursoExternosAdapter).apply {
                 clear()
                 addAll(cursosExternos)
