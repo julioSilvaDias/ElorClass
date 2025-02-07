@@ -6,6 +6,7 @@ import android.util.Log
 import bbdd.pojos.Reunion
 import com.example.elorrclass.MainActivityCursosExternos
 import com.example.elorrclass.MainActivityLogin
+import com.example.elorrclass.MainActivityPerfil
 import com.example.elorrclass.MainActivityRegistro
 import com.example.elorrclass.MainActivityPanel
 import com.example.elorrclass.MainActivityReuniones
@@ -68,6 +69,7 @@ class SocketManager(private val activity: Activity) {
             (activity as? MainActivityPanel)?.handleUserResponse(usuario)
             println(usuario)
             (activity as MainActivityRegistro).preloadInfo(usuario)
+            (activity as MainActivityPerfil).changePassword(usuario)
         }
 
         socket.on(Events.ON_GET_HORARIO_ANSWER.value) { args ->
