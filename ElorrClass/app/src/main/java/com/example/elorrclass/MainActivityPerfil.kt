@@ -3,6 +3,7 @@ package com.example.elorrclass
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -62,6 +63,8 @@ class MainActivityPerfil : AppCompatActivity() {
             }
         }
 
+        socketManager.getUserId("alumno1")
+
         findViewById<Button>(R.id.button_VolverPanel).setOnClickListener {
             val intent = Intent(applicationContext, MainActivityPanel::class.java)
             startActivity(intent)
@@ -72,8 +75,6 @@ class MainActivityPerfil : AppCompatActivity() {
         if (username != null) {
             socketManager.getUserId(username)
         }*/
-
-        socketManager.getUserId("alumno1")
 
         setUpSpinner()
     }
@@ -123,20 +124,20 @@ class MainActivityPerfil : AppCompatActivity() {
                 val currentPassword = findViewById<TextView>(R.id.textView_IngresarClaveActual)
                 val newPassword = findViewById<TextView>(R.id.textView_IngresarNuevaClave)
                 val confirmPassword = findViewById<TextView>(R.id.textView_ConfirmarNuevaClave)
-
                 if (currentPassword.text.isNotEmpty() && newPassword.text.isNotEmpty() && confirmPassword.text.isNotEmpty()) {
-                    if (currentPassword.text != usuario.password) {
-                        Toast.makeText(this, "No coinciden la contraseña actual", Toast.LENGTH_SHORT).show()
+                    if (currentPassword.text.toString() != usuario.password) {
+                        Toast.makeText(this, "No coincide la contraseña actual", Toast.LENGTH_SHORT).show()
                     } else {
-                        if (newPassword.text.toString() == "Elorrieta00" || confirmPassword.text.toString() == "Elorrieta00") {
-                            Toast.makeText(this, "La contraseña debe ser diferente a la de por defecto", Toast.LENGTH_SHORT).show()
+                        if (newPassword.text.toString()== usuario.password) {
+                            Toast.makeText(this, "La contraseña nueva es igual que la anterior", Toast.LENGTH_SHORT).show()
+                        } else if (newPassword.text.toString() == confirmPassword.text.toString()) {
+                            socketManager.changePassword(usuario.login.toString(), newPassword.text.toString())
+                            Toast.makeText(this, "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show()
+                            currentPassword.text = ""
+                            newPassword.text =""
+                            confirmPassword.text = ""
                         } else {
-                            if (newPassword.text.toString() == confirmPassword.text.toString()) {
-                                socketManager.changePassword(usuario.nombre.toString(), newPassword.text.toString())
-                                Toast.makeText(this, "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                            }
+                            Toast.makeText(this, "Las contraseñas nuevas no coinciden", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
@@ -144,6 +145,5 @@ class MainActivityPerfil : AppCompatActivity() {
                 }
             }
         }
-
     }
 }

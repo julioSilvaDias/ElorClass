@@ -28,7 +28,7 @@ import java.sql.Date
 import java.sql.Timestamp
 
 class SocketManager(private val activity: Activity) {
-    private val ipPort = "http://10.5.104.26:5000"
+    private val ipPort = "http://192.168.1.19:5000"
     private val socket: Socket = IO.socket(ipPort)
     private var tag = "socket.io"
 
@@ -68,8 +68,8 @@ class SocketManager(private val activity: Activity) {
             val usuario = gson.fromJson(message, Usuario::class.java)
             (activity as? MainActivityPanel)?.handleUserResponse(usuario)
             println(usuario)
-            (activity as MainActivityRegistro).preloadInfo(usuario)
-            (activity as MainActivityPerfil).changePassword(usuario)
+            (activity as? MainActivityRegistro)?.preloadInfo(usuario)
+            (activity as? MainActivityPerfil)?.changePassword(usuario)
         }
 
         socket.on(Events.ON_GET_HORARIO_ANSWER.value) { args ->
@@ -119,7 +119,7 @@ class SocketManager(private val activity: Activity) {
             val gson = Gson()
             val usuario = gson.fromJson(message, Usuario::class.java)
             println(usuario)
-            (activity as MainActivityRegistro).preloadInfo(usuario)
+            (activity as? MainActivityRegistro)?.preloadInfo(usuario)
         }
 
         socket.on(Events.ON_REGISTER_ANSWER.value){ args->
