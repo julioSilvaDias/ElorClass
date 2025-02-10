@@ -2,13 +2,14 @@ package com.example.elorrclass.socketIO
 
 import CustomSqlDateAdapter
 import android.app.Activity
+import android.util.Base64
 import android.util.Log
 import bbdd.pojos.Reunion
 import com.example.elorrclass.MainActivityCursosExternos
 import com.example.elorrclass.MainActivityLogin
+import com.example.elorrclass.MainActivityPanel
 import com.example.elorrclass.MainActivityPerfil
 import com.example.elorrclass.MainActivityRegistro
-import com.example.elorrclass.MainActivityPanel
 import com.example.elorrclass.MainActivityReuniones
 import com.example.elorrclass.adapter.TimestampAdapter
 import com.example.elorrclass.pojos.CursosExternos
@@ -20,12 +21,17 @@ import com.example.elorrclass.socketIO.model.UpdateUser
 import com.example.elorrclass.socketIO.model.UserPass
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.sql.Date
 import java.sql.Timestamp
+import javax.crypto.Cipher
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.DESKeySpec
+import javax.crypto.spec.IvParameterSpec
 
 class SocketManager(private val activity: Activity) {
     private val ipPort = "http://192.168.1.19:5000"
@@ -112,13 +118,29 @@ class SocketManager(private val activity: Activity) {
         }
 
         socket.on(Events.ON_CHANGE_PASSWORD_ANSWER.value){ args->
-            val response = args[0] as JSONObject
+            val string = args[0] as String
+            val response = JSONObject(string)
             val message = response.getString("message")
+            val messageIv = response.getString("iv")
             Log.d(tag, "mesaje recibido: $message")
+
+            val iv = Base64.decode(messageIv, Base64.NO_WRAP)
 
             val gson = Gson()
             val usuario = gson.fromJson(message, Usuario::class.java)
             println(usuario)
+            val passwordCifrada = Base64.decode(usuario.password, Base64.NO_WRAP)
+
+            val skf = SecretKeyFactory.getInstance("DES")
+            val clavEspec = DESKeySpec("Elorrieta00".toByteArray())
+            val claveSecreta = skf.generateSecret(clavEspec)
+
+            val cipher = Cipher.getInstance("DES/CBC/PKCS5Padding")
+            val ivSpec = IvParameterSpec(iv)
+            cipher.init(Cipher.DECRYPT_MODE, claveSecreta, ivSpec)
+            val passwordDesencriptada = String(cipher.doFinal(passwordCifrada), Charsets.UTF_8)
+            usuario.password = passwordDesencriptada
+
             (activity as? MainActivityRegistro)?.preloadInfo(usuario)
         }
 
@@ -177,9 +199,24 @@ class SocketManager(private val activity: Activity) {
         }}
 
     fun changePassword(username: String, password: String) {
-        val userPass = UserPass(username, password)
-        socket.emit(Events.ON_CHANGE_PASSWORD.value, Gson().toJson(userPass))
-        Log.d (tag, "datos enviados: -> $userPass")
+        val skf = SecretKeyFactory.getInstance("DES")
+        val clavEspec = DESKeySpec("Elorrieta00".toByteArray())
+        val claveSecreta = skf.generateSecret(clavEspec)
+
+        val cipher = Cipher.getInstance("DES/CBC/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, claveSecreta)
+        val encryptedBytes = cipher.doFinal(password.toByteArray())
+        val iv = cipher.iv
+
+        val passwordE = Base64.encodeToString(encryptedBytes, Base64.NO_WRAP)
+        val ivBase64 = Base64.encodeToString(iv, Base64.NO_WRAP)
+        val json = JsonObject().apply {
+            addProperty("username", username)
+            addProperty("pass", passwordE)
+            addProperty("iv", ivBase64)
+        }
+        socket.emit(Events.ON_CHANGE_PASSWORD.value, Gson().toJson(json))
+        Log.d (tag, "datos enviados: -> $json")
     }
 
     fun register(

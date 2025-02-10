@@ -10,6 +10,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.elorrclass.pojos.Usuario
 import com.example.elorrclass.socketIO.SocketManager
+import javax.crypto.Cipher
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.DESKeySpec
+import javax.crypto.spec.IvParameterSpec
+
 
 class MainActivityRegistro : AppCompatActivity() {
 
@@ -32,6 +37,19 @@ class MainActivityRegistro : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_registro)
+
+        val skf = SecretKeyFactory.getInstance("DES")
+        val clavEspec = DESKeySpec("Elorrieta00".toByteArray())
+        val claveSecreta = skf.generateSecret(clavEspec)
+
+        val cipher = Cipher.getInstance("DES/CBC/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, claveSecreta)
+        val encryptedBytes = cipher.doFinal("hola".toByteArray())
+        val iv = cipher.iv
+
+        val dps = IvParameterSpec(iv)
+        cipher.init(Cipher.DECRYPT_MODE, claveSecreta, dps)
+        val encrypted = cipher.doFinal(encryptedBytes)
 
         user = findViewById(R.id.textView_UsuarioRegistro)
         name = findViewById(R.id.textView_Nombre)
